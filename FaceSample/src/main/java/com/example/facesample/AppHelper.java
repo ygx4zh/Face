@@ -1,6 +1,8 @@
 package com.example.facesample;
 
 
+import android.content.Context;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,5 +16,11 @@ public class AppHelper {
         }
 
         pool.execute(r);
+    }
+
+    public static int dp2px(Context ctx, float dpValue) {
+
+        final float scale = ctx.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

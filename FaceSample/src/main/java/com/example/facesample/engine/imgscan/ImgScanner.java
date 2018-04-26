@@ -15,7 +15,7 @@ import java.util.List;
 public class ImgScanner {
     private static final String TAG = "ImgScanner";
     private static Handler mHandler = new Handler(Looper.getMainLooper());
-    public static void scanSDCard(final ImgSubscriber subscriber) {
+    public static<T> void scanSDCard(final ImgSubscriber<T> subscriber) {
 
         AppHelper.run(new Runnable() {
             @Override
@@ -23,7 +23,7 @@ public class ImgScanner {
                 int frequency = subscriber.getFrequency();
                 File parentalPath = subscriber.getParentalPath();
 
-                ArrayList<File> fss = new ArrayList<>();
+                ArrayList<T> fss = new ArrayList<>();
 
                 mHandler.post(new Runnable() {
                     @Override
@@ -50,7 +50,7 @@ public class ImgScanner {
 
     }
 
-    private static void traverse(File file, List<File> fss, int fraquency, ImgSubscriber subscriber) {
+    private static<T> void traverse(File file, List<T> fss, int fraquency, ImgSubscriber<T> subscriber) {
         File[] files = file.listFiles();
         Log.e(TAG, "traverse: "+file.getAbsolutePath());
         for (File f : files) {
@@ -59,7 +59,7 @@ public class ImgScanner {
                 traverse(f, fss, fraquency, subscriber);
             } else {
                 if (isImage(f)) {
-                    fss.add(f);
+                    fss.add(subscriber.getFun().applyAs(f));
                     String name = f.getName();
                     Log.e(TAG, "traverse: "+name);
                     if (fraquency > 0 && fss.size() == fraquency) {

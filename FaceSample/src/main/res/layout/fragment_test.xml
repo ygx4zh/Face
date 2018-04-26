@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/test_rv"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/test_recyV"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
@@ -13,7 +14,7 @@
         android:layout_height="match_parent">
         <Button
             android:layout_centerInParent="true"
-            android:id="@+id/test_btn"
+            android:id="@+id/test_btn_upload"
             android:text="导入数据"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
