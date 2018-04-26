@@ -11,7 +11,10 @@ import com.example.facesample.bean.ImgBean;
 
 
 public class ImgHolder extends RecyclerView.ViewHolder {
-
+    private static BitmapFactory.Options opts = new BitmapFactory.Options();
+    static {
+        opts.inSampleSize = 3;
+    }
     private ImageView mIv;
     private TextView mTv;
 
@@ -22,7 +25,7 @@ public class ImgHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(ImgBean img){
-        mIv.setImageBitmap(BitmapFactory.decodeFile(img.getImgFile().getAbsolutePath()));
+        mIv.setImageBitmap(BitmapFactory.decodeFile(img.getImgFile().getAbsolutePath(),opts));
         mTv.setText(img.getImgFile().getName());
     }
 }

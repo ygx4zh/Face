@@ -53,9 +53,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     private void findView(View v) {
 
         mTrv = v.findViewById(R.id.camera2_trv);
-        mTrv.setOnTouchListener(this);
+        // mTrv.setOnTouchListener(this);
         mVTakePhoto = v.findViewById(R.id.camera2_v_takePhoto);
         mVSwicthCamera = v.findViewById(R.id.camera2_v_switch);
+        v.findViewById(R.id.camera2_v_back).setOnClickListener(this);
 
         mVSwicthCamera.setOnClickListener(this);
         mVTakePhoto.setOnClickListener(this);
@@ -137,6 +138,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.camera2_v_takePhoto:
                 takePhoto();
+                break;
+            case R.id.camera2_v_back:
+                if (mCb != null) {
+                    mCb.onFinishAty();
+                }
                 break;
         }
     }
@@ -237,5 +243,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     public interface Callback {
 
         void onTakePhoto(CameraFragment fragment, Bitmap bitmap);
+
+        void onFinishAty();
     }
 }

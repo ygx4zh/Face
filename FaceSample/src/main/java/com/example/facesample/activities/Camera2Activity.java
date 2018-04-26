@@ -65,6 +65,11 @@ public class Camera2Activity extends AppCompatActivity implements CameraFragment
     }
 
     @Override
+    public void onFinishAty() {
+        finish();
+    }
+
+    @Override
     public void onAction(BitmapFragment fragment, boolean useBitmap, Bitmap bitmap) {
         if(!useBitmap){
             FragmentTransaction ft = fm.beginTransaction();

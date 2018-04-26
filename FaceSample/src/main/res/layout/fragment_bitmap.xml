@@ -24,13 +24,13 @@
             android:layout_centerVertical="true"
             android:id="@+id/bitmap_v_left"
             android:background="@drawable/shape_takephoto"
-            android:src="@mipmap/ic_cancle"
             android:layout_width="50dp"
+            android:src="@mipmap/ic_selected"
             android:layout_height="50dp"/>
 
         <ImageView
+            android:src="@mipmap/ic_cancle"
             android:background="@drawable/shape_takephoto"
-            android:src="@mipmap/ic_selected"
             android:id="@+id/bitmap_v_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
