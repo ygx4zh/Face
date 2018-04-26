@@ -1,6 +1,7 @@
 package com.example.facesample.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,13 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.facesample.R;
+import com.example.facesample.activities.Camera2Activity;
 import com.example.facesample.adapters.ImgAdapter;
 import com.example.facesample.bean.ImgBean;
 import com.example.facesample.engine.imgscan.Function;
 import com.example.facesample.engine.imgscan.ImgScanner;
 import com.example.facesample.engine.imgscan.ImgSubscriber;
 import com.example.facesample.ui.dialogs.SelectFolderDialog;
-import com.example.facesample.utils.ToastUtils;
+import com.example.facesample.utils.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,6 +52,9 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         mBtnUpload = v.findViewById(R.id.test_btn_upload);
         mBtnUpload.setOnClickListener(this);
         mRecyView = v.findViewById(R.id.test_recyV);
+        v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
+        v.findViewById(R.id.test_ll_remove).setOnClickListener(this);
+        v.findViewById(R.id.test_ll_upload).setOnClickListener(this);
         initRecyViewAdapter();
     }
 
@@ -85,6 +90,14 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
             case R.id.test_btn_upload:
                 showSelectDialog();
                 break;
+            case R.id.test_ll_upload:
+                showSelectDialog();
+                break;
+            case R.id.test_ll_camera:
+                startActivity(new Intent(getActivity(), Camera2Activity.class));
+                break;
+            case R.id.test_ll_remove:
+                break;
         }
     }
 
@@ -100,7 +113,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
             dialog.dismiss();
 
         if (selected && !TextUtils.isEmpty(folderPath)) {
-            ToastUtils.show(getContext(), folderPath);
+            ToastUtil.show(getContext(), folderPath);
             loadImgs(folderPath);
             mRecyView.setVisibility(View.VISIBLE);
             mBtnUpload.setVisibility(View.GONE);

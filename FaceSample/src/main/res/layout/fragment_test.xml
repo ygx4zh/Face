@@ -22,6 +22,7 @@
             android:layout_height="match_parent">
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/test_btn_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,6 +38,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/test_ll_upload"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,6 +62,7 @@
 
 
         <LinearLayout
+            android:id="@+id/test_ll_camera"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -83,6 +86,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/test_ll_remove"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

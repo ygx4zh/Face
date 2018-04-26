@@ -3,4 +3,5 @@
     <string name="upload">UPLOAD</string>
     <string name="CAMERA">CAMERA</string>
     <string name="DELETE">DELETE</string>
+    <string name="op_too_often">操作太频繁</string>
 </resources>
