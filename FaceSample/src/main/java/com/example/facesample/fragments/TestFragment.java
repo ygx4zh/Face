@@ -1,6 +1,7 @@
 package com.example.facesample.fragments;
 
 import android.app.Dialog;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -59,9 +60,22 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         imgBeans = new ArrayList<>();
         adapter = new ImgAdapter(imgBeans);
         mRecyView.setAdapter(adapter);
-       /* //设置item之间的间隔
-        SpacesItemDecoration decoration=new SpacesItemDecoration(16);
-        recyclerView.addItemDecoration(decoration);*/
+        //设置item之间的间隔
+        mRecyView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            private int space = 16;
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.left = space;
+                outRect.right = space;
+                outRect.bottom = space;
+                //第一个不设置间隔,否则顶部有空白
+                if (parent.getChildPosition(view) == 0 || parent.getChildPosition(view) == 1) {
+                    outRect.top = space;
+                }
+            }
+        });
 
     }
 

@@ -3,16 +3,19 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:padding="10dp"
+    android:background="@drawable/shape_round_white">
 
     <ImageView
         android:id="@+id/img_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"/>
+        />
     <TextView
         android:id="@+id/img_tv"
+        android:singleLine="true"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
