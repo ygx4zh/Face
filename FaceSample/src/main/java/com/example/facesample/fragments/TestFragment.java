@@ -63,7 +63,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         //设置item之间的间隔
         mRecyView.addItemDecoration(new RecyclerView.ItemDecoration() {
 
-            private int space = 16;
+            private int space = 30;
 
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
