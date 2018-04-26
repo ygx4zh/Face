@@ -111,7 +111,7 @@ public class SelectFolderDialog extends Dialog implements
     private TextView getActivePathView(String name) {
         if (mActivePathView == null) {
             mActivePathView = new TextView(getContext());
-            mActivePathView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            mActivePathView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         }
         mActivePathView.setText(name);
         return mActivePathView;
@@ -130,7 +130,7 @@ public class SelectFolderDialog extends Dialog implements
         mSpliteViewParams.rightMargin = _5dp;
         tv.setLayoutParams(mSpliteViewParams);
         tv.setTextColor(0x99000000);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         return tv;
     }
 
@@ -139,7 +139,7 @@ public class SelectFolderDialog extends Dialog implements
         tv.setText(pathNode.getValue().getName());
         tv.setTag(pathNode);
         tv.setTextColor(0xFF3f95d5);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         tv.setOnClickListener(mPathNodeClickListener);
         return tv;
     }

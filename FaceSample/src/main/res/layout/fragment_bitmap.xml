@@ -20,15 +20,17 @@
         android:layout_height="70dp"
         >
 
-        <View
+        <ImageView
             android:layout_centerVertical="true"
             android:id="@+id/bitmap_v_left"
-            android:background="@mipmap/ic_ok"
+            android:background="@drawable/shape_takephoto"
+            android:src="@mipmap/ic_cancle"
             android:layout_width="50dp"
             android:layout_height="50dp"/>
 
-        <View
-            android:background="@mipmap/ic_delete"
+        <ImageView
+            android:background="@drawable/shape_takephoto"
+            android:src="@mipmap/ic_selected"
             android:id="@+id/bitmap_v_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

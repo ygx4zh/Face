@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FaceSample</string>
-    <string name="upload">UPLOAD</string>
-    <string name="CAMERA">CAMERA</string>
-    <string name="DELETE">DELETE</string>
+    <string name="upload">导图</string>
+    <string name="CAMERA">识别</string>
+    <string name="DELETE">清空</string>
     <string name="op_too_often">操作太频繁</string>
 </resources>

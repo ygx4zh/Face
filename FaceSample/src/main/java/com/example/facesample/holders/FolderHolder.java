@@ -33,7 +33,7 @@ public class FolderHolder extends AbsViewHolder<FileBean> {
     public void bindData(FileBean data) {
         mTvName.setText(data.getFile().getName());
         if (data.isSelected())
-            mFl.setBackgroundColor(0x66000000);
+            mFl.setBackgroundColor(0x33000000);
         else
             mFl.setBackgroundColor(0x00000000);
     }
