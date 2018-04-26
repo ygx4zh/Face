@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@mipmap/ic_delete" />
+                android:src="@mipmap/ic_clear" />
 
             <TextView
                 android:textSize="12sp"

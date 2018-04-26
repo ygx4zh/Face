@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextureView
+        android:id="@+id/camera2_trv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        >
+        <ImageView
+            android:id="@+id/camera2_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp" />
+
+        <View
+            android:id="@+id/camera2_v_takePhoto"
+            android:background="@drawable/layers_takephoto"
+            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+        <View
+            android:id="@+id/camera2_v_switch"
+            android:background="@mipmap/ic_switch"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

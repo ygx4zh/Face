@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 }
 
-greendao{
+greendao {
     schemaVersion 1
     daoPackage 'com.example.facesample.db.greendao'
 }
