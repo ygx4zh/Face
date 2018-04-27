@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.facesample.R;
 import com.example.facesample.activities.Camera2Activity;
+import com.example.facesample.activities.VerifyActivity;
 import com.example.facesample.adapters.ImgAdapter;
 import com.example.facesample.bean.ImgBean;
 import com.example.facesample.engine.imgscan.Function;
@@ -97,6 +98,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                 startActivity(new Intent(getActivity(), Camera2Activity.class));
                 break;
             case R.id.test_ll_remove:
+                startActivity(new Intent(getActivity(), VerifyActivity.class));
                 break;
         }
     }
