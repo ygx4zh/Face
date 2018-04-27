@@ -2,6 +2,7 @@ package com.example.facesample;
 
 
 import android.content.Context;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -53,6 +54,14 @@ public class AppHelper {
         } else {
             return (360 - degree + cameraInfo.orientation) % 360;
         }
+    }
+
+    private static Point outSize = new Point();
+    public static Point getScreenSize(Context ctx){
+        WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+
+        wm.getDefaultDisplay().getSize(outSize);
+        return outSize;
     }
 
     public static int getSupportCameras(){

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
         v.findViewById(R.id.test_ll_remove).setOnClickListener(this);
         v.findViewById(R.id.test_ll_upload).setOnClickListener(this);
+
         initRecyViewAdapter();
     }
 
@@ -122,27 +124,33 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         }
     }
 
+    private static final String TAG = "TestFragment";
     private void loadImgs(String path) {
         ImgScanner.scanSDCard(
                 new ImgSubscriber<ImgBean>(new File(path),
                         new Function<File, ImgBean>() {
                             @Override
                             public ImgBean applyAs(File p) {
+                                String name = p.getName();
+                                Log.e(TAG, "applyAs: "+name);
                                 return new ImgBean(p, p.getName());
                             }
                         }) {
                     @Override
                     public void onScanStart() {
                         imgBeans.clear();
+                        Log.e(TAG, "onScanStart: ");
                     }
 
                     @Override
                     public void onScanCompleted(List<ImgBean> files) {
                         imgBeans.addAll(files);
+                        Log.e(TAG, "onScanCompleted: "+files.size());
                     }
 
                     @Override
                     public void onScanEnd() {
+                        Log.e(TAG, "onScanEnd: ");
                         adapter.notifyDataSetChanged();
                     }
                 });

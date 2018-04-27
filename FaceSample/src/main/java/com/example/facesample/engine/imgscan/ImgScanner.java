@@ -16,7 +16,7 @@ public class ImgScanner {
     private static final String TAG = "ImgScanner";
     private static Handler mHandler = new Handler(Looper.getMainLooper());
     public static<T> void scanSDCard(final ImgSubscriber<T> subscriber) {
-
+        subscriber.onScanStart();
         AppHelper.run(new Runnable() {
             @Override
             public void run() {
@@ -24,13 +24,6 @@ public class ImgScanner {
                 File parentalPath = subscriber.getParentalPath();
 
                 ArrayList<T> fss = new ArrayList<>();
-
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        subscriber.onScanStart();
-                    }
-                });
 
                 traverse(parentalPath, fss, frequency, subscriber);
                 if (frequency <= 0) {
