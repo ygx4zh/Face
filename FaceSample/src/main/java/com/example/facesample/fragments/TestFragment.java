@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -52,13 +53,12 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     }
 
     private void findView(View v) {
-        mBtnUpload = v.findViewById(R.id.test_btn_upload);
-        mBtnUpload.setOnClickListener(this);
         mRecyView = v.findViewById(R.id.test_recyV);
-        v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
+        /*v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
         v.findViewById(R.id.test_ll_remove).setOnClickListener(this);
-        v.findViewById(R.id.test_ll_upload).setOnClickListener(this);
-
+        v.findViewById(R.id.test_ll_upload).setOnClickListener(this);*/
+        v.findViewById(R.id.test_fab_action).setOnClickListener(this);
+        v.findViewById(R.id.test_fab_contrast).setOnClickListener(this);
         initRecyViewAdapter();
     }
 
@@ -91,19 +91,35 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.test_btn_upload:
-                showSelectDialog();
+
+            case R.id.test_fab_action:
+                showSnake(v);
                 break;
-            case R.id.test_ll_upload:
-                showSelectDialog();
-                break;
-            case R.id.test_ll_camera:
-                startActivity(new Intent(getActivity(), Camera2Activity.class));
-                break;
-            case R.id.test_ll_remove:
-                startActivity(new Intent(getActivity(), VerifyActivity.class));
+            case R.id.test_fab_contrast:
+                showCompare(v);
+                // startActivity(new Intent(getActivity(), Camera2Activity.class));
                 break;
         }
+    }
+
+    private void showCompare(View v) {
+        Snackbar.make(v, "对比图片", Snackbar.LENGTH_LONG)
+                .setAction("点我", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(getActivity(), Camera2Activity.class));
+                    }
+                }).show();
+    }
+
+    private void showSnake(View v) {
+        Snackbar.make(v, "导入图片", Snackbar.LENGTH_LONG)
+                .setAction("点我", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showSelectDialog();
+                    }
+                }).show();
     }
 
     private void showSelectDialog() {
@@ -120,12 +136,12 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
         if (selected && !TextUtils.isEmpty(folderPath)) {
             ToastUtil.show(getContext(), folderPath);
             loadImgs(folderPath);
-            mRecyView.setVisibility(View.VISIBLE);
-            mBtnUpload.setVisibility(View.GONE);
+            // mRecyView.setVisibility(View.VISIBLE);
         }
     }
 
     private static final String TAG = "TestFragment";
+
     private void loadImgs(String path) {
         ImgScanner.scanSDCard(
                 new ImgSubscriber<ImgBean>(new File(path),
@@ -133,7 +149,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                             @Override
                             public ImgBean applyAs(File p) {
                                 String name = p.getName();
-                                Log.e(TAG, "applyAs: "+name);
+                                Log.e(TAG, "applyAs: " + name);
                                 return new ImgBean(p, p.getName());
                             }
                         }) {
@@ -147,7 +163,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                     @Override
                     public void onScanCompleted(List<ImgBean> files) {
                         imgBeans.addAll(files);
-                        Log.e(TAG, "onScanCompleted: "+files.size());
+                        Log.e(TAG, "onScanCompleted: " + files.size());
                     }
 
                     @Override
@@ -159,13 +175,13 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                 });
     }
 
-    private void startLoadingAnim(){
+    private void startLoadingAnim() {
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.show();
 
     }
 
-    private void dismissDialog(){
+    private void dismissDialog() {
         if (loadingDialog != null) {
             loadingDialog.dismiss();
         }

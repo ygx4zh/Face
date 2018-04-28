@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     implementation 'com.github.vondear:RxTools:v1.7.7.3'
     //请替换成上方 JitPack 最新的版本号
+    implementation 'com.android.support:design:26.0.0-alpha1'
 }
 
 greendao {
