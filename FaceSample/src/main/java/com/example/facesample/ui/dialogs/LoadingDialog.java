@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.example.facesample.R;
-import com.vondear.rxtools.view.progressing.style.Circle;
+import com.vondear.rxtools.view.progressing.style.ThreeBounce;
 
 
 public class LoadingDialog extends BaseDialog {
@@ -26,7 +26,7 @@ public class LoadingDialog extends BaseDialog {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_loading, null);
         ProgressBar mPb = view.findViewById(R.id.loading_pb);
-        mPb.setIndeterminateDrawable(new Circle());
+        mPb.setIndeterminateDrawable(new ThreeBounce());
         setContentView(view);
 
         setCancelable(false);
