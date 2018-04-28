@@ -8,12 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.facesample.R;
 import com.example.facesample.adapters.SimilarAdapter;
@@ -28,6 +30,7 @@ public class VerifyActivity extends AppCompatActivity {
     public final static int PHOTO = 2;
     private ImageView mIv;
     private ViewPager mVp;
+    private TextView mTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,9 @@ public class VerifyActivity extends AppCompatActivity {
         mIv = findViewById(R.id.verify_iv);
         mIv.setImageResource(R.mipmap.ai_2);
         mVp = findViewById(R.id.verify_vp);
+        mTv = findViewById(R.id.verify_tv_info);
+
+        mTv.setText(Html.fromHtml(getString(R.string.info_format)));
         initFilesData();
         mVp.setOffscreenPageLimit(3);
         int pagerWidth = (int) (getResources().getDisplayMetrics().widthPixels * 3.0f / 5.0f);

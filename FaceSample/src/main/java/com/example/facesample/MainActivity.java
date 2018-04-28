@@ -1,8 +1,10 @@
 package com.example.facesample;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -15,8 +17,19 @@ public class MainActivity extends AppCompatActivity {
         hiddenActionBar();
         setContentView(R.layout.activity_main);
 
+        new Thread(r).start();
     }
-
+    private  boolean rFlag = false;
+    private Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            rFlag = true;
+            while (rFlag) {
+                SystemClock.sleep(1000);
+                Log.e(TAG, "run: 输出中文");
+            }
+        }
+    };
     void hiddenActionBar(){
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -35,5 +48,16 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        rFlag = false;
     }
 }
