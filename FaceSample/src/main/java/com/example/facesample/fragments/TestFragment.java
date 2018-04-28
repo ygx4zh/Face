@@ -22,6 +22,7 @@ import com.example.facesample.bean.ImgBean;
 import com.example.facesample.engine.imgscan.Function;
 import com.example.facesample.engine.imgscan.ImgScanner;
 import com.example.facesample.engine.imgscan.ImgSubscriber;
+import com.example.facesample.ui.dialogs.LoadingDialog;
 import com.example.facesample.ui.dialogs.SelectFolderDialog;
 import com.example.facesample.utils.ToastUtil;
 
@@ -36,6 +37,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     private ImgAdapter adapter;
     private List<ImgBean> imgBeans;
     private View mBtnUpload;
+    private LoadingDialog loadingDialog;
 
     @Nullable
     @Override
@@ -47,7 +49,6 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findView(view);
-
     }
 
     private void findView(View v) {
@@ -139,6 +140,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                     @Override
                     public void onScanStart() {
                         imgBeans.clear();
+                        startLoadingAnim();
                         Log.e(TAG, "onScanStart: ");
                     }
 
@@ -152,7 +154,20 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                     public void onScanEnd() {
                         Log.e(TAG, "onScanEnd: ");
                         adapter.notifyDataSetChanged();
+                        dismissDialog();
                     }
                 });
+    }
+
+    private void startLoadingAnim(){
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.show();
+
+    }
+
+    private void dismissDialog(){
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
     }
 }
