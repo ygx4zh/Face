@@ -114,6 +114,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 FaceBean face = FaceBean.decodeFile(face_token);
+                Log.e(TAG, "run: face_token "+face_token);
                 if (face == null) {
                     Log.e(TAG, "run: local file is null: "+face_token);
                     continue;
