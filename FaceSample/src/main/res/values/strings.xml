@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">FaceSample</string>
-    <string name="upload">导图</string>
-    <string name="CAMERA">识别</string>
-    <string name="DELETE">清空</string>
-    <string name="op_too_often">操作太频繁</string>
-    <string name="ldh">
-        大中华区乐坛和影坛巨星，华人娱乐圈影、视、歌综合发展最成功的代表性人物之一。作为歌手，他是香港乐坛“四大天王”之一，吉尼斯世界纪录中获奖最多的粤语男歌手，曾六度夺得香港“十大劲歌金曲颁奖典礼”的“最受欢迎男歌星”奖；作为演员，他是香港“无线五虎”之一，参与演出的电影超过140部，先后获得三届香港电影金像奖最佳男主角奖，两届台湾电影金马奖最佳男主角奖，2012年担任第49届台湾电影金马奖评审团主席。作为巨星，他先后四次登上央视春晚舞台，享誉整个华人社会，被誉为华语娱乐圈的“常青树”。主要成就包括：香港十大杰出青年，世界十大杰出青年，第十二届世界杰出华人奖，连续六次蝉联台湾十大偶像冠军，六次夺得劲歌金曲最受欢迎男歌手，八十年代港剧“无线五虎”之一，九十年代乐坛“四大天王”之一，吉尼斯纪录获奖最多的粤语歌手。
-    </string>
 
+    <string name="op_too_often">操作太频繁</string>
     <string name="info_format">
        <![CDATA[
         <h1>%s</h1>\n\n
@@ -15,6 +9,8 @@
         %s
         ]]>
     </string>
+    <string name="src_no_face">源图片无法识别出人脸</string>
+    <string name="no_similar_face">无匹配上的图片</string>
 
     <string name="similar_photos">相似图集</string>
     <string name="similar_photos_format">相似图集( %d )</string>

@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
         hiddenActionBar();
         setContentView(R.layout.activity_main);
 
-        // new Thread(r).start();
     }
 
     void hiddenActionBar(){

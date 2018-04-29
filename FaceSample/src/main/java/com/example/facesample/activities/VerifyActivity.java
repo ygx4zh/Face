@@ -59,6 +59,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final int UPDATE_FACE_COUNT = 1;
     private static final int REFRESHUI         = 2;
+    private static final int SRC_NO_FACE       = 3;
+    private static final int SIMILAR_EMPTY     = 4;
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
@@ -68,6 +70,12 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                     break;
                 case REFRESHUI:
                     adapter.notifyDataSetChanged();
+                    break;
+                case SIMILAR_EMPTY:
+                    mTvCount.setText(R.string.no_similar_face);
+                    break;
+                case SRC_NO_FACE:
+                    mTvCount.setText(R.string.src_no_face);
                     break;
             }
         }
@@ -81,11 +89,19 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setFullScreen();
+        hiddenAction();
         setContentView(R.layout.activity_verify);
 
         findView();
 
         initData();
+    }
+
+    private void hiddenAction(){
+        ActionBar bar = getSupportActionBar();
+        if(bar != null){
+            bar.hide();
+        }
     }
 
     private void initData() {
@@ -96,23 +112,12 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = getIntent();
 
         int type = intent.getIntExtra("type", 0);
-        switch (type){
-            case FILE:
-                String path = intent.getStringExtra("path");
-                bitmap = BitmapFactory.decodeFile(path);
-                mIv.setImageBitmap(bitmap);
-                FaceImageBean faceImageBean = DBManager.queryFaceImgBeanByFilePath(path);
-                showInfo(faceImageBean);
-                break;
-            case PHOTO:
-                String path2 = intent.getStringExtra("path");
-                bitmap = BitmapFactory.decodeFile(path2);
-                mIv.setImageBitmap(bitmap);
-                FaceImageBean faceImageBean2 = DBManager.queryFaceImgBeanByFilePath(path2);
-                showInfo(faceImageBean2);
-                break;
-        }
-
+        String path = intent.getStringExtra("path");
+        bitmap = BitmapFactory.decodeFile(path);
+        FaceImageBean image = createBitmapFaceImage(bitmap);
+        mFiles.add(image);
+        adapter.notifyDataSetChanged();
+        mIv.setImageBitmap(bitmap);
         AppHelper.run(searchSimilar);
     }
 
@@ -144,33 +149,32 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         public void run() {
             AFR_FSDKFace afr_fsdkFace = FaceVerify.extraBitmapFeature(bitmap);
             if(afr_fsdkFace == null){
-                Log.e(TAG, "run: 未找到人脸");
+                mHandler.sendEmptyMessage(SRC_NO_FACE);
                 return;
             }
             List<FaceImageBean> faceImageBeans = DBManager.queryFaceImages();
-            Log.e(TAG, "run: "+faceImageBeans.size());
             for (FaceImageBean bean : faceImageBeans) {
                 String face_token = bean.getFace_token();
                 if(TextUtils.isEmpty(face_token))
                 {
-                    Log.e(TAG, "run: face token is null");
                     continue;
                 }
 
                 FaceBean face = FaceBean.decodeFile(face_token);
-                Log.e(TAG, "run: face_token "+face_token);
                 if (face == null) {
-                    Log.e(TAG, "run: local file is null: "+face_token);
                     continue;
                 }
                 double cump = FaceVerify.cump(afr_fsdkFace, face.getMface());
-                Log.e(TAG, "run: cump: "+cump);
                 if(cump > 0.5f){
                     mHandler.sendMessage(Message.obtain(mHandler,UPDATE_FACE_COUNT,++ count));
                     mFiles.add(bean);
                 }
             }
-            mHandler.sendMessage(Message.obtain(mHandler,REFRESHUI));
+            if(count == 0){
+                mHandler.sendMessage(Message.obtain(mHandler,SIMILAR_EMPTY));
+            }else{
+                mHandler.sendMessage(Message.obtain(mHandler,REFRESHUI));
+            }
         }
     };
 
@@ -219,6 +223,12 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         adapter.setOnItemClickListener(this);
     }
 
+    private FaceImageBean createBitmapFaceImage(Bitmap bmp){
+        FaceImageBean bean = new FaceImageBean();
+        bean.setmBmp(bmp);
+        bean.setType(FaceImageBean.FACE_BITMAP);
+        return bean;
+    }
     private static final String TAG = "VerifyActivity";
 
     @Override
@@ -276,9 +286,14 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void showSimilar(FaceImageBean bean){
-        String path = bean.getPath();
-        File file = new File(path);
-        Picasso.get().load(file).into(mIv);
-        showInfo(bean);
+        if(bean.getType() == FaceImageBean.FACE_BITMAP){
+            mTv.setText("");
+            mIv.setImageBitmap(bean.getmBmp());
+        }else {
+            String path = bean.getPath();
+            File file = new File(path);
+            Picasso.get().load(file).into(mIv);
+            showInfo(bean);
+        }
     }
 }

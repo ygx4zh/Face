@@ -72,7 +72,11 @@ public class SimilarAdapter extends PagerAdapter {
         iv.setTag(R.id.key_position, position);
         FaceImageBean bean = files.get(position);
         iv.setTag(R.id.key_data, bean);
-        Picasso.get().load(new File(bean.getPath())).into(iv);
+        if(bean.getType() == FaceImageBean.FACE_BITMAP){
+            iv.setImageBitmap(bean.getmBmp());
+        }else {
+            Picasso.get().load(new File(bean.getPath())).into(iv);
+        }
         container.addView(iv);
         return iv;
     }

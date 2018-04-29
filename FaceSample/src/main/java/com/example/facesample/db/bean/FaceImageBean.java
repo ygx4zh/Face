@@ -1,9 +1,12 @@
 package com.example.facesample.db.bean;
 
 
+import android.graphics.Bitmap;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * 人脸图片对象
@@ -21,12 +24,17 @@ public class FaceImageBean {
     /** 多张脸    */
     public static final int MULTI_FACE  = 2;
 
+    /** 使用bitmap */
+    public static final int FACE_BITMAP = 3;
+
     @Id
     private String fname;
     private String face_token;
     private String path;
     private String extra;
 
+    @Transient
+    private Bitmap mBmp;
     /**
      * 图片类型
      *
@@ -48,6 +56,14 @@ public class FaceImageBean {
 
     @Generated(hash = 1365577280)
     public FaceImageBean() {
+    }
+
+    public Bitmap getmBmp() {
+        return mBmp;
+    }
+
+    public void setmBmp(Bitmap mBmp) {
+        this.mBmp = mBmp;
     }
 
     public String getFname() {
