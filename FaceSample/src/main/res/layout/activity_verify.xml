@@ -54,6 +54,7 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:id="@+id/verify_tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
