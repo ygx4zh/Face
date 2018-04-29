@@ -9,15 +9,17 @@ import android.view.ViewParent;
 import android.widget.ImageView;
 
 
+import com.example.facesample.db.bean.FaceImageBean;
+
 import java.io.File;
 import java.util.List;
 
 public class SimilarAdapter extends PagerAdapter {
 
-    private List<File> files;
+    private List<FaceImageBean> files;
     private ImageView[] mIvs = new ImageView[6];
 
-    public SimilarAdapter(List<File> files){
+    public SimilarAdapter(List<FaceImageBean> files){
         this.files = files;
     }
 
@@ -51,7 +53,7 @@ public class SimilarAdapter extends PagerAdapter {
             Log.e(TAG, "instantiateItem: tag: "+i);
         }
         iv.setTag(i);
-        iv.setImageBitmap(BitmapFactory.decodeFile(files.get(position).getAbsolutePath()));
+        iv.setImageBitmap(BitmapFactory.decodeFile(files.get(position).getPath()));
         // iv.setImageResource(files.get(position));
         ViewParent parent = iv.getParent();
         Log.e(TAG, "instantiateItem: "+parent);

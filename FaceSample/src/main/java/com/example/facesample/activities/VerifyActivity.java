@@ -53,6 +53,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private static final int UPDATE_FACE_COUNT = 1;
+    private static final int REFRESHUI         = 2;
     private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
@@ -60,11 +61,15 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 case UPDATE_FACE_COUNT:
                     mTvCount.setText(String.format(Locale.CHINA,photosFormat,(int)msg.obj));
                     break;
+                case REFRESHUI:
+                    adapter.notifyDataSetChanged();
+                    break;
             }
         }
     };
     private TextView mTvCount;
     private String photosFormat;
+    private SimilarAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +128,10 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 Log.e(TAG, "run: cump: "+cump);
                 if(cump > 0.5f){
                     mHandler.sendMessage(Message.obtain(mHandler,UPDATE_FACE_COUNT,++ count));
+                    mFiles.add(bean);
                 }
             }
+            mHandler.sendMessage(Message.obtain(mHandler,REFRESHUI));
         }
     };
 
@@ -144,7 +151,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private List<File> mFiles = new ArrayList<>();
+    private List<FaceImageBean> mFiles = new ArrayList<>();
 
     void findView(){
         mIv = findViewById(R.id.verify_iv);
@@ -166,20 +173,10 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         mVp.setLayoutParams(lp);
         mVp.setPageMargin(-50);
         mVp.setPageTransformer(true, new GallyPageTransformer());
-        mVp.setAdapter(new SimilarAdapter(mFiles));
+        adapter = new SimilarAdapter(mFiles);
+        mVp.setAdapter(adapter);
     }
-    void initFilesData(){
 
-        File res = new File(Environment.getExternalStorageDirectory(), "res");
-        File[] files = res.listFiles();
-        for (File f : files) {
-            boolean b = f.isFile() && f.getName().endsWith(".jpg");
-            if(b){
-                mFiles.add(f);
-                Log.e(TAG, "initFilesData: "+f.getName());
-            }
-        }
-    }
 
     private static final String TAG = "VerifyActivity";
 

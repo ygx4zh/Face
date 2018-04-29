@@ -47,7 +47,7 @@ public class FaceBean {
             int len = -1;
             byte[] buf = new byte[1024];
             while ((len = is.read(buf)) != -1) {
-                baos.write(buf);
+                baos.write(buf,0,len);
                 baos.flush();
             }
             bean = new FaceBean(new AFR_FSDKFace(baos.toByteArray()),file.getName());
