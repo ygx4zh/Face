@@ -14,7 +14,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.facesample.AppHelper;
+import com.example.facesample.utils.AppHelper;
 import com.example.facesample.R;
 import com.example.facesample.utils.ToastUtil;
 

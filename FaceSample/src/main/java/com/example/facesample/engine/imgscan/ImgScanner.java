@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.facesample.AppHelper;
+import com.example.facesample.utils.AppHelper;
 
 import java.io.File;
 import java.util.ArrayList;

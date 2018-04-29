@@ -5,13 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 
@@ -22,6 +20,7 @@ public class DisplayImageView extends ImageView {
     private int mW;
     private int mH;
     private int mWidth;
+    private int mHeight;
 
     public DisplayImageView(Context context) {
         super(context);
@@ -64,11 +63,13 @@ public class DisplayImageView extends ImageView {
 
     private void calcMatrix(Bitmap bm){
         mWidth = bm.getWidth();
-        int height = bm.getHeight();
-        Log.e(TAG, "calcMatrix: "+ mWidth +" // "+height);
+        mHeight = bm.getHeight();
         float cw = mW * 1.0f / mWidth;
-        Log.e(TAG, "calcMatrix: "+cw);
-        mMatrix.setScale(1.0f+cw,1.0f+cw);
+
+        float ch = /*mH * 1.0f / mHeight*/cw;
+
+        float max_c = Math.min(cw, ch);
+        mMatrix.setScale(1.0f+max_c,1.0f+max_c);
         setImageMatrix(mMatrix);
     }
 
@@ -77,12 +78,15 @@ public class DisplayImageView extends ImageView {
         super.onSizeChanged(w, h, oldw, oldh);
         if(mW == 0){
             float cw = w * 1.0f / mWidth;
-            Log.e(TAG, "calcMatrix: "+cw);
-            mMatrix.setScale(cw,cw);
+            float ch = /*h * 1.0f / mHeight;*/cw;
+
+            float max_c = Math.min(cw, ch);
+            mMatrix.setScale(1.0f+max_c,1.0f+max_c);
             setImageMatrix(mMatrix);
         }
         mW = w;
         mH = h;
         Log.e(TAG, "onSizeChanged: "+w+" // "+h);
     }
+
 }

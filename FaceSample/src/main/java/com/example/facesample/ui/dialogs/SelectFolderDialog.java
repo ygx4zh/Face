@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.facesample.AppHelper;
+import com.example.facesample.utils.AppHelper;
 import com.example.facesample.R;
 import com.example.facesample.adapters.FolderAdapter;
 import com.example.facesample.bean.FileBean;

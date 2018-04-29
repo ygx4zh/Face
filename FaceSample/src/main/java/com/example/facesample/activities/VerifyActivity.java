@@ -20,17 +20,20 @@ import android.widget.TextView;
 import com.example.facesample.R;
 import com.example.facesample.adapters.SimilarAdapter;
 import com.example.facesample.engine.imgscan.GallyPageTransformer;
+import com.example.facesample.utils.AnimUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerifyActivity extends AppCompatActivity {
+public class VerifyActivity extends AppCompatActivity implements View.OnClickListener {
     public final static int FILE = 1;
     public final static int PHOTO = 2;
     private ImageView mIv;
     private ViewPager mVp;
     private TextView mTv;
+    private View mVSimilar;
+    private View mRl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,9 @@ public class VerifyActivity extends AppCompatActivity {
         mIv.setImageResource(R.mipmap.ai_2);
         mVp = findViewById(R.id.verify_vp);
         mTv = findViewById(R.id.verify_tv_info);
-
+        mVSimilar = findViewById(R.id.verify_tv_similar);
+        mRl = findViewById(R.id.verify_rl);
+        mVSimilar.setOnClickListener(this);
         mTv.setText(Html.fromHtml(getString(R.string.info_format)));
         initFilesData();
         mVp.setOffscreenPageLimit(3);
@@ -113,4 +118,32 @@ public class VerifyActivity extends AppCompatActivity {
     }
 
     private static final String TAG = "VerifyActivity";
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.verify_tv_similar:
+                // 相似图片
+                // switchViewpagerVisibility();
+                break;
+        }
+    }
+
+    private int mSwitchMode = VISIBLITY;
+
+    /* 切换中 */
+    private static final int SWITCHING      = 1;
+    /* 已显示 */
+    private static final int VISIBLITY      = 2;
+    /* 未显示 */
+    private static final int INVISIBLITY    = 3;
+    private void switchViewpagerVisibility() {
+        if(mSwitchMode == SWITCHING) return;
+
+        if(mSwitchMode == VISIBLITY){
+            AnimUtil.playTranslationYOut(mVp,mRl);
+        }else{
+            AnimUtil.playTranslationYIn(mVp,mRl);
+        }
+    }
 }

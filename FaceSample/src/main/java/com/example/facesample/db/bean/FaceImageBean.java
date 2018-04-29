@@ -25,7 +25,7 @@ public class FaceImageBean {
     private String face_token;
     private String name;
     private String path;
-    private String parentalPath;
+    private String extra;
 
     /**
      * 图片类型
@@ -36,13 +36,13 @@ public class FaceImageBean {
      */
     private int type;
 
-    @Generated(hash = 1582435062)
-    public FaceImageBean(String face_token, String name, String path,
-            String parentalPath, int type) {
+    @Generated(hash = 813527789)
+    public FaceImageBean(String face_token, String name, String path, String extra,
+            int type) {
         this.face_token = face_token;
         this.name = name;
         this.path = path;
-        this.parentalPath = parentalPath;
+        this.extra = extra;
         this.type = type;
     }
 
@@ -74,12 +74,12 @@ public class FaceImageBean {
         this.path = path;
     }
 
-    public String getParentalPath() {
-        return this.parentalPath;
+    public String getExtra() {
+        return this.extra;
     }
 
-    public void setParentalPath(String parentalPath) {
-        this.parentalPath = parentalPath;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
     public int getType() {

@@ -25,6 +25,7 @@ import com.example.facesample.engine.imgscan.ImgScanner;
 import com.example.facesample.engine.imgscan.ImgSubscriber;
 import com.example.facesample.ui.dialogs.LoadingDialog;
 import com.example.facesample.ui.dialogs.SelectFolderDialog;
+import com.example.facesample.utils.SpConfig;
 import com.example.facesample.utils.ToastUtil;
 
 import java.io.File;
@@ -39,6 +40,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     private List<ImgBean> imgBeans;
     private View mBtnUpload;
     private LoadingDialog loadingDialog;
+    private View mIv;
 
     @Nullable
     @Override
@@ -54,6 +56,7 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
 
     private void findView(View v) {
         mRecyView = v.findViewById(R.id.test_recyV);
+        mIv = v.findViewById(R.id.test_iv_empty);
         /*v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
         v.findViewById(R.id.test_ll_remove).setOnClickListener(this);
         v.findViewById(R.id.test_ll_upload).setOnClickListener(this);*/
@@ -169,8 +172,16 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                     @Override
                     public void onScanEnd() {
                         Log.e(TAG, "onScanEnd: ");
-                        adapter.notifyDataSetChanged();
                         dismissDialog();
+                        if (imgBeans.size() > 0) {
+                            if (mIv.getVisibility() == View.VISIBLE) {
+                                mIv.setVisibility(View.GONE);
+                            }
+                            adapter.notifyDataSetChanged();
+                            // SpConfig.getString("")
+                        }
+                        else
+                            mIv.setVisibility(View.VISIBLE);
                     }
                 });
     }

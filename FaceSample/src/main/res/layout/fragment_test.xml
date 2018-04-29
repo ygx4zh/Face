@@ -15,6 +15,14 @@
             android:layout_height="match_parent"
             android:background="#11000000" />
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/test_iv_empty"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_file_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </FrameLayout>
 
 
