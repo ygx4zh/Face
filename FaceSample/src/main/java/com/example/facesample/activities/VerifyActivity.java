@@ -1,5 +1,6 @@
 package com.example.facesample.activities;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.example.facesample.R;
 import com.example.facesample.adapters.SimilarAdapter;
 import com.example.facesample.engine.imgscan.GallyPageTransformer;
+import com.example.facesample.ui.views.DisplayImageView;
 import com.example.facesample.utils.AnimUtil;
 
 import java.io.File;
@@ -29,7 +31,7 @@ import java.util.List;
 public class VerifyActivity extends AppCompatActivity implements View.OnClickListener {
     public final static int FILE = 1;
     public final static int PHOTO = 2;
-    private ImageView mIv;
+    private DisplayImageView mIv;
     private ViewPager mVp;
     private TextView mTv;
     private View mVSimilar;
@@ -136,11 +138,28 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         if(mSwitchMode == SWITCHING) return;
         if(mSwitchMode == VISIBLITY){
             mSwitchMode = SWITCHING;
-            AnimUtil.playTranslationYOut(mFl,mLl);
+            final int[] position = new int[2];
+            mFl.getLocationOnScreen(position);
+//            Log.e(TAG, "switchViewpagerVisibility: "+translationY+" // "+top);
+            AnimUtil.playTranslationYOut(mFl, mLl,
+                    new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    // mIv.updateBitmapScale(true, position[1],(Float) animation.getAnimatedValue());
+                }
+            });
             mSwitchMode = INVISIBLITY;
         }else{
             mSwitchMode = SWITCHING;
-            AnimUtil.playTranslationYIn(mFl,mLl);
+            final int[] position = new int[2];
+            mFl.getLocationOnScreen(position);
+            AnimUtil.playTranslationYIn(mFl, mLl,
+                    new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    // mIv.updateBitmapScale(false, position[1], (Float) animation.getAnimatedValue());
+                }
+            });
             mSwitchMode = VISIBLITY;
         }
     }

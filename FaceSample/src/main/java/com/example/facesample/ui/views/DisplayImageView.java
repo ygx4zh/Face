@@ -21,6 +21,7 @@ public class DisplayImageView extends ImageView {
     private int mH;
     private int mWidth;
     private int mHeight;
+    private float cw;
 
     public DisplayImageView(Context context) {
         super(context);
@@ -66,7 +67,7 @@ public class DisplayImageView extends ImageView {
         mWidth = bm.getWidth();
         mHeight = bm.getHeight();
         float cw = mW * 1.0f / mWidth;
-        mMatrix.setScale( cw,  cw);
+        mMatrix.setScale(cw, cw);
         setImageMatrix(mMatrix);
     }
 
@@ -74,7 +75,7 @@ public class DisplayImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (mW == 0) {
-            float cw = w * 1.0f / mWidth;
+            cw = w * 1.0f / mWidth;
             mMatrix.setScale(cw, cw);
             setImageMatrix(mMatrix);
         }
@@ -82,4 +83,33 @@ public class DisplayImageView extends ImageView {
         mH = h;
     }
 
+    public void updateBitmapScale(boolean out, float transY, float value) {
+        if (out) {
+            onOut(value, transY);
+        } else {
+            onIn(value, transY);
+        }
+    }
+
+    private void onOut(float value, float transY) {
+        Log.e(TAG, "onOut: "+(mHeight * cw) + " // "+((transY+value)));
+        if (mHeight * cw < (transY+value)) {
+            float v = (transY + value) / (mHeight * cw);
+            cw = v;
+            mMatrix.setScale(v, v);
+            Log.e(TAG, "onOut: v");
+            setImageMatrix(mMatrix);
+        }
+    }
+
+    private void onIn(float value, float transY) {
+
+        // 如果图片的伸缩宽度大于控件的宽度
+        if(mWidth * cw > mW){
+            float v = (value + transY) / (mHeight * cw);
+            cw = v;
+            mMatrix.setScale(v,v);
+            setImageMatrix(mMatrix);
+        }
+    }
 }
