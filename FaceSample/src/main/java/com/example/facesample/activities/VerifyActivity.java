@@ -33,7 +33,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private ViewPager mVp;
     private TextView mTv;
     private View mVSimilar;
-    private View mRl;
+    private View mLl;
+    private View mFl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,6 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private List<File> mFiles = new ArrayList<>();
-    // private List<Integer> mFiles = new ArrayList<>();
 
     void findView(){
         mIv = findViewById(R.id.verify_iv);
@@ -81,7 +81,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         mVp = findViewById(R.id.verify_vp);
         mTv = findViewById(R.id.verify_tv_info);
         mVSimilar = findViewById(R.id.verify_tv_similar);
-        mRl = findViewById(R.id.verify_rl);
+        mLl = findViewById(R.id.verify_ll);
+        mFl = findViewById(R.id.verify_fl);
         mVSimilar.setOnClickListener(this);
         mTv.setText(Html.fromHtml(getString(R.string.info_format)));
         initFilesData();
@@ -109,12 +110,6 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 Log.e(TAG, "initFilesData: "+f.getName());
             }
         }
-       /* mFiles.add(R.mipmap.ai_1);
-        mFiles.add(R.mipmap.ai_2);
-        mFiles.add(R.mipmap.ai_3);
-        mFiles.add(R.mipmap.ai_4);
-        mFiles.add(R.mipmap.ai_5);
-        mFiles.add(R.mipmap.ai_6);*/
     }
 
     private static final String TAG = "VerifyActivity";
@@ -124,7 +119,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.verify_tv_similar:
                 // 相似图片
-                // switchViewpagerVisibility();
+                switchViewpagerVisibility();
                 break;
         }
     }
@@ -139,11 +134,14 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private static final int INVISIBLITY    = 3;
     private void switchViewpagerVisibility() {
         if(mSwitchMode == SWITCHING) return;
-
         if(mSwitchMode == VISIBLITY){
-            AnimUtil.playTranslationYOut(mVp,mRl);
+            mSwitchMode = SWITCHING;
+            AnimUtil.playTranslationYOut(mFl,mLl);
+            mSwitchMode = INVISIBLITY;
         }else{
-            AnimUtil.playTranslationYIn(mVp,mRl);
+            mSwitchMode = SWITCHING;
+            AnimUtil.playTranslationYIn(mFl,mLl);
+            mSwitchMode = VISIBLITY;
         }
     }
 }
