@@ -22,8 +22,8 @@ public class FaceImageBean {
     public static final int MULTI_FACE  = 2;
 
     @Id
+    private String fname;
     private String face_token;
-    private String name;
     private String path;
     private String extra;
 
@@ -36,11 +36,11 @@ public class FaceImageBean {
      */
     private int type;
 
-    @Generated(hash = 813527789)
-    public FaceImageBean(String face_token, String name, String path, String extra,
+    @Generated(hash = 1568474043)
+    public FaceImageBean(String fname, String face_token, String path, String extra,
             int type) {
+        this.fname = fname;
         this.face_token = face_token;
-        this.name = name;
         this.path = path;
         this.extra = extra;
         this.type = type;
@@ -50,20 +50,20 @@ public class FaceImageBean {
     public FaceImageBean() {
     }
 
+    public String getFname() {
+        return this.fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
     public String getFace_token() {
         return this.face_token;
     }
 
     public void setFace_token(String face_token) {
         this.face_token = face_token;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPath() {
@@ -88,5 +88,16 @@ public class FaceImageBean {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "FaceImageBean{" +
+                "fname='" + fname + '\'' +
+                ", face_token='" + face_token + '\'' +
+                ", path='" + path + '\'' +
+                ", extra='" + extra + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

@@ -42,6 +42,7 @@ dependencies {
     implementation files('libs/facedetection.jar')
     implementation files('libs/facerecognition.jar')
     implementation 'com.guo.android_extend:android-extend:1.0.1'
+    // implementation 'https://github.com/gqjjqg/android-extend'
 
 }
 

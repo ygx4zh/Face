@@ -6,15 +6,16 @@ import android.view.ViewGroup;
 
 import com.example.facesample.R;
 import com.example.facesample.bean.ImgBean;
+import com.example.facesample.db.bean.FaceImageBean;
 import com.example.facesample.holders.ImgHolder;
 
 import java.util.List;
 
 public class ImgAdapter extends RecyclerView.Adapter<ImgHolder> {
 
-    private List<ImgBean> imgs;
+    private List<FaceImageBean> imgs;
 
-    public ImgAdapter(List<ImgBean> imgs){
+    public ImgAdapter(List<FaceImageBean> imgs){
         this.imgs = imgs;
     }
 

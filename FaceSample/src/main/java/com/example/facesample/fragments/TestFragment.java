@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -20,16 +22,23 @@ import com.example.facesample.activities.Camera2Activity;
 import com.example.facesample.activities.VerifyActivity;
 import com.example.facesample.adapters.ImgAdapter;
 import com.example.facesample.bean.ImgBean;
+import com.example.facesample.db.DBManager;
+import com.example.facesample.db.bean.FaceImageBean;
+import com.example.facesample.engine.imgscan.FaceFilterImpl;
 import com.example.facesample.engine.imgscan.Function;
 import com.example.facesample.engine.imgscan.ImgScanner;
 import com.example.facesample.engine.imgscan.ImgSubscriber;
+import com.example.facesample.engine.imgscan.ToImgFun;
 import com.example.facesample.ui.dialogs.LoadingDialog;
 import com.example.facesample.ui.dialogs.SelectFolderDialog;
+import com.example.facesample.utils.AppHelper;
 import com.example.facesample.utils.SpConfig;
 import com.example.facesample.utils.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -37,10 +46,11 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
 
     private RecyclerView mRecyView;
     private ImgAdapter adapter;
-    private List<ImgBean> imgBeans;
-    private View mBtnUpload;
+    private List<FaceImageBean> imgBeans;
     private LoadingDialog loadingDialog;
     private View mIv;
+
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Nullable
     @Override
@@ -52,14 +62,49 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findView(view);
+
+        initData();
+    }
+
+    private void initData() {
+        AppHelper.run(new Runnable() {
+            @Override
+            public void run() {
+                List<FaceImageBean> list = DBManager.queryFaceImages();
+                imgBeans.clear();
+                Collections.sort(list, new Comparator<FaceImageBean>() {
+                    @Override
+                    public int compare(FaceImageBean o1, FaceImageBean o2) {
+                        String face_token = o1.getFace_token();
+                        String face_token2 = o2.getFace_token();
+                        if(TextUtils.isEmpty(face_token) && TextUtils.isEmpty(face_token2))
+                        {
+                            return o1.getFname().compareTo(o2.getFname());
+                        }
+
+                        if(!TextUtils.isEmpty(face_token) && !TextUtils.isEmpty(face_token2))
+                        {
+                            return o1.getFname().compareTo(o2.getFname());
+                        }
+
+                        return TextUtils.isEmpty(face_token) ? 1 : -1;
+                    }
+                });
+                imgBeans.addAll(list);
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
     }
 
     private void findView(View v) {
         mRecyView = v.findViewById(R.id.test_recyV);
         mIv = v.findViewById(R.id.test_iv_empty);
-        /*v.findViewById(R.id.test_ll_camera).setOnClickListener(this);
-        v.findViewById(R.id.test_ll_remove).setOnClickListener(this);
-        v.findViewById(R.id.test_ll_upload).setOnClickListener(this);*/
         v.findViewById(R.id.test_fab_action).setOnClickListener(this);
         v.findViewById(R.id.test_fab_contrast).setOnClickListener(this);
         initRecyViewAdapter();
@@ -67,7 +112,10 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
 
     private void initRecyViewAdapter() {
         //设置layoutManager
-        mRecyView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mRecyView.setLayoutManager(
+                new StaggeredGridLayoutManager(
+                        2,
+                        StaggeredGridLayoutManager.VERTICAL));
         //设置adapter
         imgBeans = new ArrayList<>();
         adapter = new ImgAdapter(imgBeans);
@@ -147,26 +195,40 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
 
     private void loadImgs(String path) {
         ImgScanner.scanSDCard(
-                new ImgSubscriber<ImgBean>(new File(path),
-                        new Function<File, ImgBean>() {
-                            @Override
-                            public ImgBean applyAs(File p) {
-                                String name = p.getName();
-                                Log.e(TAG, "applyAs: " + name);
-                                return new ImgBean(p, p.getName());
-                            }
-                        }) {
+                new ToImgFun(),
+                new ImgSubscriber<FaceImageBean>(new File(path)) {
                     @Override
                     public void onScanStart() {
                         imgBeans.clear();
                         startLoadingAnim();
-                        Log.e(TAG, "onScanStart: ");
                     }
 
                     @Override
-                    public void onScanCompleted(List<ImgBean> files) {
+                    public void onScanCompleted(List<FaceImageBean> files) {
+                        imgBeans.clear();
                         imgBeans.addAll(files);
-                        Log.e(TAG, "onScanCompleted: " + files.size());
+                        Collections.sort(imgBeans, new Comparator<FaceImageBean>() {
+                            @Override
+                            public int compare(FaceImageBean o1, FaceImageBean o2) {
+                                String face_token = o1.getFace_token();
+                                String face_token2 = o2.getFace_token();
+                                if(TextUtils.isEmpty(face_token) && TextUtils.isEmpty(face_token2))
+                                {
+                                    return o1.getFname().compareTo(o2.getFname());
+                                }
+
+                                if(!TextUtils.isEmpty(face_token) && !TextUtils.isEmpty(face_token2))
+                                {
+                                    return o1.getFname().compareTo(o2.getFname());
+                                }
+
+                                return TextUtils.isEmpty(face_token) ? 1 : -1;
+                            }
+                        });
+                        DBManager.clearAllFaceImages();
+                        DBManager.insertFaceImages(files);
+                        List<FaceImageBean> images = DBManager.queryFaceImages();
+                        Log.e(TAG, "onScanCompleted: "+images.size());
                     }
 
                     @Override
@@ -178,7 +240,6 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                                 mIv.setVisibility(View.GONE);
                             }
                             adapter.notifyDataSetChanged();
-                            // SpConfig.getString("")
                         }
                         else
                             mIv.setVisibility(View.VISIBLE);

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
- public class FaceVerify {
+public class FaceVerify {
 
     private static final String TAG = "Comput";
     public static String appid = "EDVRFWJi1ZQkCx4Fg8PwECc6SETFXgwv5QuuUNojkvNY";
@@ -29,15 +29,16 @@ import java.util.concurrent.Executors;
     public static final ExecutorService executorService = Executors.newFixedThreadPool(1);//两条线程处理
 
 
-     /**
-      * 返回总分为1.0的分数
-      * @param b
-      * @param mIDCardpic
-      * @return
-      */
+    /**
+     * 返回总分为1.0的分数
+     *
+     * @param b
+     * @param mIDCardpic
+     * @return
+     */
     public static double cump(AFR_FSDKFace b, AFR_FSDKFace mIDCardpic) {
         AFR_FSDKMatching score = new AFR_FSDKMatching();
-        engine1.AFR_FSDK_FacePairMatching(b,mIDCardpic,score);
+        engine1.AFR_FSDK_FacePairMatching(b, mIDCardpic, score);
         return score.getScore();
     }
 
@@ -59,9 +60,9 @@ import java.util.concurrent.Executors;
 
     /**
      * 转换bitmap信息
+     *
      * @param mBitmap
-     * @param listener
-     * 返回检测到的AFR_FSDKFace对象或者返回null
+     * @param listener 返回检测到的AFR_FSDKFace对象或者返回null
      */
     public static void extraBitmapFeature(final Bitmap mBitmap, final OnAFRFaceListener listener) {
         executorService.execute(new Runnable() {
@@ -77,9 +78,9 @@ import java.util.concurrent.Executors;
 
                 List<AFD_FSDKFace> result = new ArrayList<AFD_FSDKFace>();
                 engine3.AFD_FSDK_StillImageFaceDetection(data, mBitmap.getWidth(), mBitmap.getHeight(), AFD_FSDKEngine.CP_PAF_NV21, result);
-                if (result.size() == 0){//未检测到可供转换的图像
+                if (result.size() == 0) {//未检测到可供转换的图像
                     listener.onBack(null);
-                }else {
+                } else {
                     AFR_FSDKFace result1 = new AFR_FSDKFace();
                     engine1.AFR_FSDK_ExtractFRFeature(data, mBitmap.getWidth(), mBitmap.getHeight(), AFR_FSDKEngine.CP_PAF_NV21, new Rect(result.get(0).getRect()), result.get(0).getDegree(), result1);
                     listener.onBack(result1);
@@ -88,8 +89,34 @@ import java.util.concurrent.Executors;
         });
     }
 
+    /**
+     * 转换bitmap信息
+     *
+     * @param mBitmap
+     * @param listener 返回检测到的AFR_FSDKFace对象或者返回null
+     */
+    public static AFR_FSDKFace extraBitmapFeature(final Bitmap mBitmap) {
+        byte[] data = new byte[mBitmap.getWidth() * mBitmap.getHeight() * 3 / 2];
+        ImageConverter convert = new ImageConverter();
+        convert.initial(mBitmap.getWidth(), mBitmap.getHeight(), ImageConverter.CP_PAF_NV21);
+        if (convert.convert(mBitmap, data)) {
+            Log.d(TAG, "convert ok!");
+        }
+        convert.destroy();
 
-    public interface OnAFRFaceListener{
+        List<AFD_FSDKFace> result = new ArrayList<AFD_FSDKFace>();
+        engine3.AFD_FSDK_StillImageFaceDetection(data, mBitmap.getWidth(), mBitmap.getHeight(), AFD_FSDKEngine.CP_PAF_NV21, result);
+        if (result.size() == 0) {//未检测到可供转换的图像
+            return null;
+        } else {
+            AFR_FSDKFace result1 = new AFR_FSDKFace();
+            engine1.AFR_FSDK_ExtractFRFeature(data, mBitmap.getWidth(), mBitmap.getHeight(), AFR_FSDKEngine.CP_PAF_NV21, new Rect(result.get(0).getRect()), result.get(0).getDegree(), result1);
+            return result1;
+        }
+    }
+
+    //         });
+    public interface OnAFRFaceListener {
         void onBack(AFR_FSDKFace afr_fsdkFace);
     }
 

@@ -12,20 +12,15 @@ public abstract class ImgSubscriber<T> {
     private File path;
 
     private int frequency;
-    private Function<File, T> fun;
 
-    public ImgSubscriber(File parentalPath, Function<File,T> fun){
-        this(parentalPath, -1, fun);
+    public ImgSubscriber(File parentalPath){
+        this(parentalPath, -1);
     }
 
-    public Function<File, T> getFun(){
-        return fun;
-    }
 
-    public ImgSubscriber(File parentalPath, int frequency, Function<File,T> fun){
+    public ImgSubscriber(File parentalPath, int frequency){
         this.path = parentalPath;
         this.frequency = frequency;
-        this.fun = fun;
     }
 
     public File getParentalPath(){
