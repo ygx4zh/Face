@@ -43,13 +43,14 @@ public class DisplayImageView extends ImageView {
         init();
     }
 
-    private void init(){
+    private void init() {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         mMatrix = new Matrix();
     }
 
     private static final String TAG = "DisplayImageView";
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -61,32 +62,24 @@ public class DisplayImageView extends ImageView {
         super.setImageBitmap(bm);
     }
 
-    private void calcMatrix(Bitmap bm){
+    private void calcMatrix(Bitmap bm) {
         mWidth = bm.getWidth();
         mHeight = bm.getHeight();
         float cw = mW * 1.0f / mWidth;
-
-        float ch = /*mH * 1.0f / mHeight*/cw;
-
-        float max_c = Math.min(cw, ch);
-        mMatrix.setScale(1.0f+max_c,1.0f+max_c);
+        mMatrix.setScale( cw,  cw);
         setImageMatrix(mMatrix);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if(mW == 0){
+        if (mW == 0) {
             float cw = w * 1.0f / mWidth;
-            float ch = /*h * 1.0f / mHeight;*/cw;
-
-            float max_c = Math.min(cw, ch);
-            mMatrix.setScale(1.0f+max_c,1.0f+max_c);
+            mMatrix.setScale(cw, cw);
             setImageMatrix(mMatrix);
         }
         mW = w;
         mH = h;
-        Log.e(TAG, "onSizeChanged: "+w+" // "+h);
     }
 
 }

@@ -37,7 +37,6 @@ public class ToImgFun implements Function<File, FaceImageBean> {
 
         String path = f.getAbsolutePath();
         String replace = path.replace("."+image_suffix, ".txt");
-        Log.e(TAG, "applyAs: "+replace);
         JSONObject jsonObject = ImgHelper.readExtra(replace);
         faceImageBean.setExtra(jsonObject.toString());
 
