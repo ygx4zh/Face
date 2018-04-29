@@ -9,17 +9,44 @@ import android.view.ViewParent;
 import android.widget.ImageView;
 
 
+import com.example.facesample.R;
 import com.example.facesample.db.bean.FaceImageBean;
+import com.example.facesample.holders.ImgHolder;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SimilarAdapter extends PagerAdapter {
 
     private List<FaceImageBean> files;
-    private ImageView[] mIvs = new ImageView[6];
+    private LinkedList<ImageView> mIvs = new LinkedList<>();
 
-    public SimilarAdapter(List<FaceImageBean> files){
+    private static final int KEY_POSITION = 1;
+    private static final int KEY_DATA = 2;
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FaceImageBean tag = (FaceImageBean) v.getTag(R.id.key_data);
+            int position = (int) v.getTag(R.id.key_position);
+            if (onItemClickListener != null) {
+                onItemClickListener.onClick(v, position, tag);
+            }
+        }
+    };
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onClick(View view, int position, FaceImageBean bean);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        onItemClickListener = listener;
+    }
+
+    public SimilarAdapter(List<FaceImageBean> files) {
         this.files = files;
     }
 
@@ -35,41 +62,27 @@ public class SimilarAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        int i = position % mIvs.length;
-        ImageView iv = mIvs[i];
-        if(iv == null){
-            iv = mIvs[i] = new ImageView(container.getContext());
-            /*Point screenSize = AppHelper.getScreenSize(container.getContext());
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams((int) (screenSize.x * 0.7),
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            iv.setLayoutParams(params);*/
+        ImageView iv = null;
+        if (mIvs.size() == 0) {
+            iv = new ImageView(container.getContext());
+            iv.setOnClickListener(mClickListener);
+        } else {
+            iv = mIvs.removeFirst();
         }
-        Log.e(TAG, "instantiateItem: "+i + " // "+position);
-
-        Integer tag = (Integer) iv.getTag();
-        if(tag == null){
-            Log.e(TAG, "instantiateItem: tag null");
-        }else{
-            Log.e(TAG, "instantiateItem: tag: "+i);
-        }
-        iv.setTag(i);
-        iv.setImageBitmap(BitmapFactory.decodeFile(files.get(position).getPath()));
-        // iv.setImageResource(files.get(position));
-        ViewParent parent = iv.getParent();
-        Log.e(TAG, "instantiateItem: "+parent);
-        if(parent == null)
-            container.addView(iv);
+        iv.setTag(R.id.key_position, position);
+        FaceImageBean bean = files.get(position);
+        iv.setTag(R.id.key_data, bean);
+        Picasso.get().load(new File(bean.getPath())).into(iv);
+        container.addView(iv);
         return iv;
     }
 
     private static final String TAG = "SimilarAdapter";
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Class<?> aClass = object.getClass();
-        Log.e(TAG, "destroyItem: "+aClass.getSimpleName()+" // "+position + (position/mIvs.length));
-        // container.removeView((ImageView) object);
-
-        // ViewParent parent = ((ImageView) object).getParent();
-        // Log.e(TAG, "destroyItem:parent: "+parent);
+        ImageView contentView = (ImageView) object;
+        container.removeView(contentView);
+        mIvs.addLast(contentView);
     }
 }

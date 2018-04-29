@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -19,12 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arcsoft.facerecognition.AFR_FSDKFace;
 import com.example.facesample.R;
-import com.example.facesample.adapters.FolderAdapter;
 import com.example.facesample.adapters.SimilarAdapter;
 import com.example.facesample.compute.FaceBean;
 import com.example.facesample.compute.FaceVerify;
@@ -34,13 +31,21 @@ import com.example.facesample.engine.imgscan.GallyPageTransformer;
 import com.example.facesample.ui.views.DisplayImageView;
 import com.example.facesample.utils.AnimUtil;
 import com.example.facesample.utils.AppHelper;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class VerifyActivity extends AppCompatActivity implements View.OnClickListener {
+public class VerifyActivity extends AppCompatActivity implements View.OnClickListener, SimilarAdapter.OnItemClickListener {
+
+    public static Bitmap sBitmap;
+
     public final static int FILE = 1;
     public final static int PHOTO = 2;
     private DisplayImageView mIv;
@@ -69,6 +74,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     };
     private TextView mTvCount;
     private String photosFormat;
+    private String infoFormat;
     private SimilarAdapter adapter;
 
     @Override
@@ -85,6 +91,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private void initData() {
 
         photosFormat = getString(R.string.similar_photos_format);
+        infoFormat = getString(R.string.info_format);
 
         Intent intent = getIntent();
 
@@ -94,10 +101,42 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 String path = intent.getStringExtra("path");
                 bitmap = BitmapFactory.decodeFile(path);
                 mIv.setImageBitmap(bitmap);
+                FaceImageBean faceImageBean = DBManager.queryFaceImgBeanByFilePath(path);
+                showInfo(faceImageBean);
+                break;
+            case PHOTO:
+                String path2 = intent.getStringExtra("path");
+                bitmap = BitmapFactory.decodeFile(path2);
+                mIv.setImageBitmap(bitmap);
+                FaceImageBean faceImageBean2 = DBManager.queryFaceImgBeanByFilePath(path2);
+                showInfo(faceImageBean2);
                 break;
         }
 
         AppHelper.run(searchSimilar);
+    }
+
+    private void showInfo(FaceImageBean faceImageBean){
+        String extra;
+        if(faceImageBean == null || TextUtils.isEmpty(extra = faceImageBean.getExtra())){
+            return;
+        }
+        try {
+            JSONObject jsonObj = new JSONObject(extra);
+            String name = jsonObj.getString("name");
+            String sex = jsonObj.getString("sex");
+            String desc = jsonObj.getString("desc");
+            mTv.setText(
+                    Html.fromHtml(
+                            String.format(
+                                    Locale.CHINA,
+                                    infoFormat,
+                                    name,
+                                    sex,
+                                    desc)));
+        } catch (JSONException e) {
+
+        }
     }
 
     private Runnable searchSimilar = new Runnable() {
@@ -175,8 +214,10 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         mVp.setPageTransformer(true, new GallyPageTransformer());
         adapter = new SimilarAdapter(mFiles);
         mVp.setAdapter(adapter);
-    }
 
+        mVp.setOnClickListener(this);
+        adapter.setOnItemClickListener(this);
+    }
 
     private static final String TAG = "VerifyActivity";
 
@@ -186,6 +227,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.verify_tv_similar:
                 // 相似图片
                 switchViewpagerVisibility();
+                break;
+            case R.id.verify_vp:
                 break;
         }
     }
@@ -225,5 +268,17 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
             });
             mSwitchMode = VISIBLITY;
         }
+    }
+
+    @Override
+    public void onClick(View view, int position, FaceImageBean bean) {
+        showSimilar(bean);
+    }
+
+    private void showSimilar(FaceImageBean bean){
+        String path = bean.getPath();
+        File file = new File(path);
+        Picasso.get().load(file).into(mIv);
+        showInfo(bean);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.facesample.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -76,6 +77,12 @@ public class Camera2Activity extends AppCompatActivity implements CameraFragment
             ft.remove(fragment);
             ft.add(R.id.camera_fl,mDisplayCameraFragment);
             ft.commit();
+        }else{
+            VerifyActivity.sBitmap = bitmap;
+            Intent intent = new Intent(this, VerifyActivity.class);
+            intent.putExtra("type",VerifyActivity.PHOTO);
+            startActivity(intent);
+            finish();
         }
     }
 }

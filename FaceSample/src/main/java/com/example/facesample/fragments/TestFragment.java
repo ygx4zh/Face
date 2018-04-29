@@ -3,9 +3,12 @@ package com.example.facesample.fragments;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -51,6 +54,9 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
     private View mIv;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private static final int TAKE_PHOTO = 2;
+    private String takePhotPath;
 
     @Nullable
     @Override
@@ -158,9 +164,35 @@ public class TestFragment extends Fragment implements View.OnClickListener, Sele
                 .setAction("点我", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getActivity(), Camera2Activity.class));
+                        // startActivity(new Intent(getActivity(), Camera2Activity.class));
+                        callSystemCameraCapture();
                     }
                 }).show();
+    }
+
+    private void callSystemCameraCapture(){
+        File dir = new File(Environment.getExternalStorageDirectory(), "face");
+        if(!dir.exists() || dir.isFile()){
+            dir.mkdir();
+        }
+        File photo = new File(dir, System.currentTimeMillis() + "_face.png");
+        takePhotPath = photo.getAbsolutePath();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// 启动系统相机
+        Uri photoUri = Uri.fromFile(photo); // 传递路径
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);// 更改系统默认存储路径
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TAKE_PHOTO) {
+
+            Intent intent = new Intent(getActivity(), VerifyActivity.class);
+            intent.putExtra("type",VerifyActivity.PHOTO);
+            intent.putExtra("path",takePhotPath);
+            startActivity(intent);
+        }
     }
 
     private void showSnake(View v) {

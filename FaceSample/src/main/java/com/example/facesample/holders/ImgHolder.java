@@ -12,6 +12,9 @@ import com.example.facesample.R;
 import com.example.facesample.activities.VerifyActivity;
 import com.example.facesample.bean.ImgBean;
 import com.example.facesample.db.bean.FaceImageBean;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 
 public class ImgHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -34,7 +37,7 @@ public class ImgHolder extends RecyclerView.ViewHolder implements View.OnClickLi
 
     public void bindData(FaceImageBean img){
         this.img = img;
-        mIv.setImageBitmap(BitmapFactory.decodeFile(img.getPath(),opts));
+        Picasso.get().load(new File(img.getPath())).into(mIv);
         mTv.setText(img.getFname());
         mIvSmile.setImageResource(
                 TextUtils.isEmpty(img.getFace_token()) ? R.mipmap.ic_smile_g:R.mipmap.ic_smile_a);
