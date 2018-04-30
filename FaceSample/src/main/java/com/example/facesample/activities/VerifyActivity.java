@@ -28,6 +28,7 @@ import com.example.facesample.compute.FaceVerify;
 import com.example.facesample.db.DBManager;
 import com.example.facesample.db.bean.FaceImageBean;
 import com.example.facesample.engine.imgscan.GallyPageTransformer;
+import com.example.facesample.holders.ImgHolder;
 import com.example.facesample.ui.views.DisplayImageView;
 import com.example.facesample.utils.AnimUtil;
 import com.example.facesample.utils.AppHelper;
@@ -292,7 +293,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         }else {
             String path = bean.getPath();
             File file = new File(path);
-            Picasso.get().load(file).into(mIv);
+            // Picasso.get().load(file).into(mIv);
+            mIv.setImageBitmap(BitmapFactory.decodeFile(path, ImgHolder.opts));
             showInfo(bean);
         }
     }
