@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F7F7F7">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/test_recyV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#11000000" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/test_iv_empty"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_file_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/test_fab_action"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="150dp"
+        android:src="@mipmap/ic_add"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_margin="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/test_fab_contrast"
+        android:src="@mipmap/ic_compare"
+        />
+
+</RelativeLayout>

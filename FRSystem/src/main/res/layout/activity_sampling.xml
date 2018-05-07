@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.facesample.activities.SamplingActivity">
+
+    <ImageView
+        android:id="@+id/sampling_iv"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:background="#33000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/sampling_et_name"
+                android:hint="姓名"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/sampling_et_sex"
+                android:textColorHint="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:hint="性别"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/sampling_et_desc"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:hint="描述"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/sampling_btn_commit"
+                android:layout_marginTop="20dp"
+                android:textColor="#FFFFFF"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="COMMIT"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>
