@@ -2,6 +2,7 @@ package com.example.facesample.activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.ActionBar;
@@ -122,7 +123,7 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
                             loading.dismiss();
                         }
                         loading = null;
-
+                        getContentResolver().notifyChange(Uri.parse("content://face"),null );
                         finish();
                     }
                 }

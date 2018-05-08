@@ -2,6 +2,7 @@ package com.example.facesample.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.example.facesample.engine.imgscan.ImgScanner;
 import com.example.facesample.engine.imgscan.ImgSubscriber;
 import com.example.facesample.engine.imgscan.ToImgFun;
 import com.example.facesample.ui.dialogs.LoadingDialog;
+import com.example.facesample.ui.dialogs.MenuDialog;
 import com.example.facesample.ui.dialogs.SelectFolderDialog;
 import com.example.facesample.utils.AppHelper;
 import com.example.facesample.utils.ToastUtil;
@@ -41,7 +43,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener, SelectFolderDialog.Callback {
+public class MainFragment extends Fragment implements View.OnClickListener, SelectFolderDialog.Callback, ImgAdapter.OnItemLongClickListener {
 
     private RecyclerView mRecyView;
     private ImgAdapter adapter;
@@ -70,6 +72,28 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
         findView(view);
 
         initData();
+
+        Uri uri = Uri.parse("content://face");
+        getContext().getContentResolver().registerContentObserver(uri,false,mObserver);
+    }
+
+    private ContentObserver mObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            initData();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().getContentResolver().unregisterContentObserver(mObserver);
     }
 
     private void initData() {
@@ -126,6 +150,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
         imgBeans = new ArrayList<>();
         adapter = new ImgAdapter(imgBeans);
         mRecyView.setAdapter(adapter);
+        adapter.setOnItemLongClickListener(this);
         //设置item之间的间隔
         mRecyView.addItemDecoration(new RecyclerView.ItemDecoration() {
 
@@ -154,7 +179,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
                 break;
             case R.id.test_fab_contrast:
                 showCompare(v);
-                // startActivity(new Intent(getActivity(), Camera2Activity.class));
                 break;
         }
     }
@@ -201,7 +225,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
     }
 
     private void showSnake(View v) {
-        Snackbar.make(v, "录入图片", Snackbar.LENGTH_LONG)
+        Snackbar.make(v, "录入人脸", Snackbar.LENGTH_LONG)
                 .setAction("点我", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -291,5 +315,36 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
         if (loadingDialog != null) {
             loadingDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onItemLongClick(View itemView, final int position) {
+        MenuDialog dialog = new MenuDialog(getActivity());
+        dialog.setCallback(new MenuDialog.Callback() {
+            @Override
+            public void onAction(Dialog dialog, int action) {
+                switch (action) {
+                    case MenuDialog.Callback.DELETE:
+                        delete(position);
+                        break;
+                    case MenuDialog.Callback.HIDDEN:
+                        hidden(position);
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void hidden(int position) {
+        FaceImageBean bean = imgBeans.remove(position);
+        adapter.notifyItemRemoved(position);
+    }
+
+    private void delete(int position) {
+        FaceImageBean bean = imgBeans.remove(position);
+        DBManager.deleteFaceImageBean(bean);
+        adapter.notifyItemRemoved(position);
     }
 }

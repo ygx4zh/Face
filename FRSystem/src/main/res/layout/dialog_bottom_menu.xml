@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:background="@drawable/shape_bg_item"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bmenu_tv_delete"
+            android:text="删除"
+            style="@style/base_item_tv" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            />
+
+        <TextView
+            android:id="@+id/bmenu_tv_hide"
+            android:text="隐藏"
+            style="@style/base_item_tv" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:background="@drawable/shape_bg_item"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bmenu_tv_cancle"
+            style="@style/base_item_tv"
+            android:text="取消"
+            />
+    </FrameLayout>
+
+</LinearLayout>

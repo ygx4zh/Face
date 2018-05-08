@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     tools:context="com.example.facesample.activities.VerifyActivity">
 
-    <com.example.facesample.ui.views.DisplayImageView
+    <ImageView
         android:id="@+id/verify_iv"
         android:background="#33000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="matrix" />
+        android:scaleType="fitXY" />
 
     <RelativeLayout
         android:background="#22000000"

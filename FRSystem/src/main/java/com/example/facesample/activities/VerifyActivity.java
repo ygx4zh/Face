@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arcsoft.facerecognition.AFR_FSDKFace;
@@ -49,7 +50,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
 
     public final static int FILE = 1;
     public final static int PHOTO = 2;
-    private DisplayImageView mIv;
+    private ImageView mIv;
     private ViewPager mVp;
     private TextView mTv;
     private View mVSimilar;

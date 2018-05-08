@@ -16,6 +16,7 @@ import com.example.frsystem.db.greendao.FaceImageBeanDao;
 
 import org.greenrobot.greendao.query.Query;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +117,24 @@ public class DBManager {
         try{
             dao.insert(bean);
         }catch (Exception ignored){
+        }
+    }
+
+    public static void deleteFaceImageBean(FaceImageBean faceImageBean) {
+        if(faceImageBean == null) return;
+        FaceImageBeanDao dao = App.getDaoSession().getFaceImageBeanDao();
+        dao.delete(faceImageBean);
+
+        File file = new File(faceImageBean.getPath());
+        if(file.exists()){
+            boolean delete = file.delete();
+            Log.e(TAG, "deleteFaceImageBean1: "+delete);
+        }
+
+        File face_fwature_path = new File(faceImageBean.getFace_feature());
+        if(face_fwature_path.exists()){
+            boolean delete2 = face_fwature_path.delete();
+            Log.e(TAG, "deleteFaceImageBean2: "+delete2);
         }
     }
 }

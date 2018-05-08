@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 
-public class ImgHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongClickListener {
     public static BitmapFactory.Options opts = new BitmapFactory.Options();
     static {
         opts.inSampleSize = 2;
@@ -26,16 +26,19 @@ public class ImgHolder extends RecyclerView.ViewHolder implements View.OnClickLi
     private ImageView mIvSmile;
     private TextView mTv;
     private FaceImageBean img;
+    private int position;
+    private OnHolderLongClickListener listener;
 
     public ImgHolder(View itemView) {
         super(itemView);
-        itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
         mIv = itemView.findViewById(R.id.img_iv);
         mTv = itemView.findViewById(R.id.img_tv);
         mIvSmile = itemView.findViewById(R.id.img_iv_smile);
     }
 
-    public void bindData(FaceImageBean img){
+    public void bindData(FaceImageBean img, int position){
+        this.position = position;
         this.img = img;
         Picasso.get().load(new File(img.getPath())).into(mIv);
         mTv.setText(img.getFname());
@@ -44,11 +47,18 @@ public class ImgHolder extends RecyclerView.ViewHolder implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(v.getContext(), VerifyActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("type",1);
-        intent.putExtra("path",img.getPath());
-        v.getContext().startActivity(intent);
+    public boolean onLongClick(View v) {
+        if (listener != null) {
+            listener.onLongClick(v,position);
+        }
+        return true;
+    }
+
+    public void setOnHolderLongClickListener(OnHolderLongClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface OnHolderLongClickListener{
+        void onLongClick(View itemView, int position);
     }
 }
