@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,9 @@ import com.example.facesample.activities.VerifyActivity;
 import com.example.facesample.adapters.ImgAdapter;
 import com.example.facesample.db.DBManager;
 import com.example.facesample.db.bean.FaceImageBean;
-import com.example.facesample.engine.imgscan.ImgScanner;
-import com.example.facesample.engine.imgscan.ImgSubscriber;
-import com.example.facesample.engine.imgscan.ToImgFun;
 import com.example.facesample.ui.dialogs.LoadingDialog;
 import com.example.facesample.ui.dialogs.MenuDialog;
-import com.example.facesample.ui.dialogs.SelectFolderDialog;
 import com.example.facesample.utils.AppHelper;
-import com.example.facesample.utils.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,12 +37,11 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener, SelectFolderDialog.Callback, ImgAdapter.OnItemLongClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener, ImgAdapter.OnItemLongClickListener {
 
     private RecyclerView mRecyView;
     private ImgAdapter adapter;
     private List<FaceImageBean> imgBeans;
-    private LoadingDialog loadingDialog;
     private View mIv;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -236,99 +229,22 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
     }
 
 
-    @Override
-    public void onSelected(Dialog dialog, boolean selected, @Nullable String folderPath) {
 
-        if (dialog.isShowing())
-            dialog.dismiss();
+    private static final String TAG = "MainFragment";
 
-        if (selected && !TextUtils.isEmpty(folderPath)) {
-            ToastUtil.show(getContext(), folderPath);
-            loadImgs(folderPath);
-            // mRecyView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private static final String TAG = "TestFragment";
-
-    private void loadImgs(String path) {
-        ImgScanner.scanSDCard(
-                new ToImgFun(),
-                new ImgSubscriber<FaceImageBean>(new File(path)) {
-                    @Override
-                    public void onScanStart() {
-                        imgBeans.clear();
-                        startLoadingAnim();
-                    }
-
-                    @Override
-                    public void onScanCompleted(List<FaceImageBean> files) {
-                        imgBeans.clear();
-                        imgBeans.addAll(files);
-                        Collections.sort(imgBeans, new Comparator<FaceImageBean>() {
-                            @Override
-                            public int compare(FaceImageBean o1, FaceImageBean o2) {
-                                String face_token = o1.getFace_token();
-                                String face_token2 = o2.getFace_token();
-                                if(TextUtils.isEmpty(face_token) && TextUtils.isEmpty(face_token2))
-                                {
-                                    return o1.getFname().compareTo(o2.getFname());
-                                }
-
-                                if(!TextUtils.isEmpty(face_token) && !TextUtils.isEmpty(face_token2))
-                                {
-                                    return o1.getFname().compareTo(o2.getFname());
-                                }
-
-                                return TextUtils.isEmpty(face_token) ? 1 : -1;
-                            }
-                        });
-                        DBManager.clearAllFaceImages();
-                        DBManager.insertFaceImages(files);
-                        List<FaceImageBean> images = DBManager.queryFaceImages();
-                        Log.e(TAG, "onScanCompleted: "+images.size());
-                    }
-
-                    @Override
-                    public void onScanEnd() {
-                        Log.e(TAG, "onScanEnd: ");
-                        dismissDialog();
-                        if (imgBeans.size() > 0) {
-                            if (mIv.getVisibility() == View.VISIBLE) {
-                                mIv.setVisibility(View.GONE);
-                            }
-                            adapter.notifyDataSetChanged();
-                        }
-                        else
-                            mIv.setVisibility(View.VISIBLE);
-                    }
-                });
-    }
-
-    private void startLoadingAnim() {
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.show();
-
-    }
-
-    private void dismissDialog() {
-        if (loadingDialog != null) {
-            loadingDialog.dismiss();
-        }
-    }
 
     @Override
-    public void onItemLongClick(View itemView, final int position) {
+    public void onItemLongClick(View itemView, final int position, final FaceImageBean obj) {
         MenuDialog dialog = new MenuDialog(getActivity());
         dialog.setCallback(new MenuDialog.Callback() {
             @Override
             public void onAction(Dialog dialog, int action) {
                 switch (action) {
                     case MenuDialog.Callback.DELETE:
-                        delete(position);
+                        delete(position,obj);
                         break;
                     case MenuDialog.Callback.HIDDEN:
-                        hidden(position);
+                        hidden(position,obj);
                         break;
                 }
                 dialog.dismiss();
@@ -337,14 +253,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sele
         dialog.show();
     }
 
-    private void hidden(int position) {
+    private void hidden(int position,FaceImageBean obj) {
         FaceImageBean bean = imgBeans.remove(position);
         adapter.notifyItemRemoved(position);
     }
 
-    private void delete(int position) {
-        FaceImageBean bean = imgBeans.remove(position);
-        DBManager.deleteFaceImageBean(bean);
-        adapter.notifyItemRemoved(position);
+    private void delete(int position,FaceImageBean obj) {
+        int index = imgBeans.indexOf(obj);
+        imgBeans.remove(index);
+        DBManager.deleteFaceImageBean(obj);
+
+         adapter.notifyItemRemoved(index);
     }
 }

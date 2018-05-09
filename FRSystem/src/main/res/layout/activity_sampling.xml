@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:visibility="invisible"
+            android:id="@+id/sampling_ll_register"
             android:layout_gravity="bottom"
             android:layout_margin="20dp"
             android:orientation="vertical"
@@ -25,7 +27,7 @@
 
             <EditText
                 android:id="@+id/sampling_et_name"
-                android:hint="姓名"
+                android:hint="@string/name"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:layout_marginTop="20dp"
@@ -36,7 +38,7 @@
                 android:id="@+id/sampling_et_sex"
                 android:textColorHint="#FFFFFF"
                 android:textColor="#FFFFFF"
-                android:hint="性别"
+                android:hint="@string/sex"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -45,7 +47,7 @@
                 android:id="@+id/sampling_et_desc"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:hint="描述"
+                android:hint="@string/desc"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -58,9 +60,21 @@
                 android:background="@color/colorAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="COMMIT"
+                android:text="@string/commit"
                 />
         </LinearLayout>
+
+        <TextView
+            android:layout_gravity="bottom"
+            android:visibility="invisible"
+            android:id="@+id/sampling_tv_noFace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_margin="20dp"
+            android:text="@string/no_face"
+            />
     </FrameLayout>
 
 </FrameLayout>

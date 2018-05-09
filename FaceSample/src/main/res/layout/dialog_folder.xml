@@ -51,29 +51,33 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/folder_tv_ok"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
-                android:text="OK"
-                android:textColor="@color/selector_selected_btn"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/folder_tv_cancle"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="80dp"
-                android:layout_toLeftOf="@id/folder_tv_ok"
-                android:text="CANCLE"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:background="@android:color/transparent"
+                    android:id="@+id/folder_tv_cancle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CANCLE"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:background="@android:color/transparent"
+                    android:id="@+id/folder_tv_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OK"
+                    android:textColor="@color/selector_selected_btn"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
         </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

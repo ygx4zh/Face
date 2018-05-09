@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FaceSample</string>
+    <string name="app_name">FRSystem</string>
 
     <string name="op_too_often">操作太频繁</string>
     <string name="info_format">
@@ -14,4 +14,9 @@
 
     <string name="similar_photos">相似图集</string>
     <string name="similar_photos_format">相似图集( %d )</string>
+    <string name="commit">COMMIT</string>
+    <string name="desc">描述</string>
+    <string name="sex">性别</string>
+    <string name="name">姓名</string>
+    <string name="no_face">未识别到人脸, 不可录入</string>
 </resources>

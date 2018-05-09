@@ -40,7 +40,9 @@ public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongCl
     public void bindData(FaceImageBean img, int position){
         this.position = position;
         this.img = img;
-        Picasso.get().load(new File(img.getPath())).into(mIv);
+        Picasso.get().load(new File(img.getPath()))
+
+                .into(mIv);
         mTv.setText(img.getFname());
         mIvSmile.setImageResource(
                 TextUtils.isEmpty(img.getFace_token()) ? R.mipmap.ic_smile_g:R.mipmap.ic_smile_a);
@@ -49,7 +51,7 @@ public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongCl
     @Override
     public boolean onLongClick(View v) {
         if (listener != null) {
-            listener.onLongClick(v,position);
+            listener.onLongClick(v,position, img);
         }
         return true;
     }
@@ -59,6 +61,6 @@ public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongCl
     }
 
     public interface OnHolderLongClickListener{
-        void onLongClick(View itemView, int position);
+        void onLongClick(View itemView, int position, FaceImageBean obj);
     }
 }

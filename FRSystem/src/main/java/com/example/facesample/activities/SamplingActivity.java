@@ -38,6 +38,8 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
     private LoadingDialog loading;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private String path;
+    private AFR_FSDKFace afr_fsdkFace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_sampling);
 
         findView();
+        AppHelper.run(mDecodeLocal);
     }
 
     void hiddenActionBar(){
@@ -83,19 +86,30 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
         AppHelper.run(mCommit);
     }
 
+    private Runnable mDecodeLocal = this::decodeLoacal;
+
+    private void decodeLoacal() {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = 2;
+        path = getIntent().getStringExtra("path");
+        Bitmap bmp = BitmapFactory.decodeFile(path, opts);
+        afr_fsdkFace = FaceVerify.extraBitmapFeature(bmp);
+
+        final boolean hasFace = afr_fsdkFace != null;
+        mHandler.post(
+                () -> findViewById(hasFace ? R.id.sampling_ll_register : R.id.sampling_tv_noFace)
+                        .setVisibility(View.VISIBLE));
+    }
+
     private Runnable mCommit = new Runnable() {
         @Override
         public void run() {
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inSampleSize = 2;
-            String path = getIntent().getStringExtra("path");
-            Bitmap bmp = BitmapFactory.decodeFile(path, opts);
-            AFR_FSDKFace afr_fsdkFace = FaceVerify.extraBitmapFeature(bmp);
+
+
+
             String faceToken = DBManager.searchFace(afr_fsdkFace);
-            Log.e(TAG, "run: "+faceToken);
             if(TextUtils.isEmpty(faceToken)){
                 faceToken = AppHelper.createFaceToken();
-            Log.e(TAG, "run2: "+faceToken);
             }
             File file = new File(path);
             FaceFeatureHandler<String> sFaceHandler

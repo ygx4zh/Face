@@ -38,9 +38,9 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgHolder> implements ImgHo
     }
 
     @Override
-    public void onLongClick(View itemView, int position) {
+    public void onLongClick(View itemView, int position, FaceImageBean obj) {
         if (l != null) {
-            l.onItemLongClick(itemView, position);
+            l.onItemLongClick(itemView, position, obj);
         }
     }
 
@@ -48,6 +48,6 @@ public class ImgAdapter extends RecyclerView.Adapter<ImgHolder> implements ImgHo
         this.l = l;
     }
     public interface OnItemLongClickListener{
-        void onItemLongClick(View itemView,int position);
+        void onItemLongClick(View itemView,int position, FaceImageBean obj);
     }
 }
