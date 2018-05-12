@@ -7,6 +7,9 @@ import android.hardware.Camera;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,5 +101,11 @@ public class AppHelper {
 
     public static String createFaceToken(){
         return createRandomString(32);
+    }
+
+    public static String curTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.CHINA);
+
+        return sdf.format(new Date(System.currentTimeMillis()));
     }
 }
