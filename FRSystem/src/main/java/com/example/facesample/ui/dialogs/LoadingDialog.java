@@ -25,7 +25,7 @@ public class LoadingDialog extends BaseDialog {
     private void initView(){
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_loading, null);
-        ProgressBar mPb = view.findViewById(R.id.loading_pb);
+        ProgressBar mPb = (ProgressBar) view.findViewById(R.id.loading_pb);
         mPb.setIndeterminateDrawable(new ThreeBounce());
         setContentView(view);
 

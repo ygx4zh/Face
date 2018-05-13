@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/FRSystem" />
-            <option value="$PROJECT_DIR$/FaceSample" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

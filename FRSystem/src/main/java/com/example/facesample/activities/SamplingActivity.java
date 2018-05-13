@@ -59,13 +59,13 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     void findView(){
-        mIv = findViewById(R.id.sampling_iv);
+        mIv = (ImageView) findViewById(R.id.sampling_iv);
 
         findViewById(R.id.sampling_btn_commit).setOnClickListener(this);
 
-        mEtName = findViewById(R.id.sampling_et_name);
-        mEtSex = findViewById(R.id.sampling_et_sex);
-        mEtDesc = findViewById(R.id.sampling_et_desc);
+        mEtName = (EditText) findViewById(R.id.sampling_et_name);
+        mEtSex = (EditText) findViewById(R.id.sampling_et_sex);
+        mEtDesc = (EditText) findViewById(R.id.sampling_et_desc);
 
         Picasso.get().load(new File(getIntent().getStringExtra("path"))).into(mIv);
     }

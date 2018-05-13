@@ -148,13 +148,13 @@ public class SelectFolderDialog extends Dialog implements
 
     private void findView(View v) {
 
-        mPathGuide = v.findViewById(R.id.folder_ll_pathGuide);
+        mPathGuide = (LinearLayout) v.findViewById(R.id.folder_ll_pathGuide);
         mBtnCancle = v.findViewById(R.id.folder_tv_cancle);
 
 
         mBtnOk = v.findViewById(R.id.folder_tv_ok);
 
-        mLv = v.findViewById(R.id.folder_lv);
+        mLv = (ListView) v.findViewById(R.id.folder_lv);
         mBtnCancle.setOnClickListener(this);
         mBtnOk.setOnClickListener(this);
         mLv.setOnItemClickListener(this);

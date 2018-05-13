@@ -126,7 +126,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
     }
 
     private void findView(View v) {
-        mRecyView = v.findViewById(R.id.test_recyV);
+        mRecyView = (RecyclerView) v.findViewById(R.id.test_recyV);
         mIv = v.findViewById(R.id.test_iv_empty);
         v.findViewById(R.id.test_fab_action).setOnClickListener(this);
         v.findViewById(R.id.test_fab_contrast).setOnClickListener(this);

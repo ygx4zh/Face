@@ -185,14 +185,14 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private List<FaceImageBean> mFiles = new ArrayList<>();
 
     void findView(){
-        mIv = findViewById(R.id.verify_iv);
-        mVp = findViewById(R.id.verify_vp);
-        mTv = findViewById(R.id.verify_tv_info);
+        mIv = (ImageView) findViewById(R.id.verify_iv);
+        mVp = (ViewPager) findViewById(R.id.verify_vp);
+        mTv = (TextView) findViewById(R.id.verify_tv_info);
         mVSimilar = findViewById(R.id.verify_tv_similar);
         mLl = findViewById(R.id.verify_ll);
         mFl = findViewById(R.id.verify_fl);
         mVSimilar.setOnClickListener(this);
-        mTvCount = findViewById(R.id.verify_tv_count);
+        mTvCount = (TextView) findViewById(R.id.verify_tv_count);
         mVp.setOffscreenPageLimit(3);
         int pagerWidth = (int) (getResources().getDisplayMetrics().widthPixels * 3.0f / 5.0f);
         ViewGroup.LayoutParams lp = mVp.getLayoutParams();

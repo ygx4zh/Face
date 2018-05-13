@@ -52,7 +52,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
     private void findView(View v) {
 
-        mTrv = v.findViewById(R.id.camera2_trv);
+        mTrv = (TextureView) v.findViewById(R.id.camera2_trv);
         // mTrv.setOnTouchListener(this);
         mVTakePhoto = v.findViewById(R.id.camera2_v_takePhoto);
         mVSwicthCamera = v.findViewById(R.id.camera2_v_switch);

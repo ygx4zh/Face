@@ -32,9 +32,9 @@ public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongCl
     public ImgHolder(View itemView) {
         super(itemView);
         itemView.setOnLongClickListener(this);
-        mIv = itemView.findViewById(R.id.img_iv);
-        mTv = itemView.findViewById(R.id.img_tv);
-        mIvSmile = itemView.findViewById(R.id.img_iv_smile);
+        mIv = (ImageView) itemView.findViewById(R.id.img_iv);
+        mTv = (TextView) itemView.findViewById(R.id.img_tv);
+        mIvSmile = (ImageView) itemView.findViewById(R.id.img_iv_smile);
     }
 
     public void bindData(FaceImageBean img, int position){

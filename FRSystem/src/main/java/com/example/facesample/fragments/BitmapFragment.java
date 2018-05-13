@@ -40,7 +40,7 @@ public class BitmapFragment extends Fragment implements View.OnClickListener {
     }
 
     private void findView(View view) {
-        mIv = view.findViewById(R.id.bitmap_iv);
+        mIv = (ImageView) view.findViewById(R.id.bitmap_iv);
         mRightV = view.findViewById(R.id.bitmap_v_right);
         mLeftV = view.findViewById(R.id.bitmap_v_left);
 

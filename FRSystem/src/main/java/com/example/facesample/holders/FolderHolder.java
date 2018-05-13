@@ -25,7 +25,7 @@ public class FolderHolder extends AbsViewHolder<FileBean> {
 
     @Override
     protected void onViewCreated(View v) {
-        mTvName = v.findViewById(R.id.ifolder_tv_name);
+        mTvName = (TextView) v.findViewById(R.id.ifolder_tv_name);
         mFl = v.findViewById(R.id.ifolder_ll);
     }
 
