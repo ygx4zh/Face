@@ -125,12 +125,13 @@ public class DBManager {
         FaceImageBeanDao dao = App.getDaoSession().getFaceImageBeanDao();
         dao.delete(faceImageBean);
 
-        File file = new File(faceImageBean.getPath());
+        /*File file = new File(faceImageBean.getPath());
         if(file.exists()){
             boolean delete = file.delete();
             Log.e(TAG, "deleteFaceImageBean1: "+delete);
-        }
+        }*/
 
+        Log.e(TAG, "deleteFaceImageBean: "+faceImageBean.getFace_feature());
         File face_fwature_path = new File(faceImageBean.getFace_feature());
         if(face_fwature_path.exists()){
             boolean delete2 = face_fwature_path.delete();

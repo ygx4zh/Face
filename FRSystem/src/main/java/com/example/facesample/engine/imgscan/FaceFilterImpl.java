@@ -2,22 +2,49 @@ package com.example.facesample.engine.imgscan;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
-import com.arcsoft.facerecognition.AFR_FSDKFace;
-import com.example.facesample.compute.FaceVerify;
+import android.media.FaceDetector;
 
 import java.io.File;
 
 
 
-public class FaceFilterImpl implements FaceFilter {
+public class FaceFilterImpl implements Filter<File, Boolean> {
+
+    private FaceDetector.Face[] faces = new FaceDetector.Face[1];
+    private FaceDetector detector;
+    private final BitmapFactory.Options opts;
+
+    public FaceFilterImpl(){
+        opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+    }
+
+    private int mCacheWidth ;
+    private int mCacheHeight;
+    final FaceDetector getFaceDetector(int bmp_width, int bmp_height) {
+       if(detector == null)
+       {
+           detector = new FaceDetector(bmp_width,bmp_height,faces.length);
+           mCacheWidth = bmp_width;
+           mCacheHeight = bmp_height;
+       }
+
+       if(bmp_height == mCacheHeight && bmp_width == mCacheWidth)
+           return detector;
+
+        detector = new FaceDetector(bmp_width,bmp_height,faces.length);
+        mCacheWidth = bmp_width;
+        mCacheHeight = bmp_height;
+        return detector;
+    }
+
+
     @Override
-    public byte[] applyAs(File p) {
-        Bitmap bitmap = BitmapFactory.decodeFile(p.getAbsolutePath());
-        AFR_FSDKFace afr_fsdkFace = FaceVerify.extraBitmapFeature(bitmap);
+    public Boolean filte(File p) {
+        Bitmap bitmap = BitmapFactory.decodeFile(p.getAbsolutePath(),opts);
+        FaceDetector faceDetector = getFaceDetector(bitmap.getWidth(), bitmap.getHeight());
+        int faces = faceDetector.findFaces(bitmap, this.faces);
 
-        if(afr_fsdkFace == null) return null;
-
-        return afr_fsdkFace.getFeatureData();
+        return faces > 0;
     }
 }

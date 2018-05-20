@@ -14,6 +14,9 @@ import com.example.facesample.bean.ImgBean;
 import com.example.facesample.db.bean.FaceImageBean;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 
@@ -41,9 +44,26 @@ public class ImgHolder extends RecyclerView.ViewHolder implements  View.OnLongCl
         this.position = position;
         this.img = img;
         Picasso.get().load(new File(img.getPath()))
-
                 .into(mIv);
-        mTv.setText(img.getFname());
+
+        // 如果extra字段不为空,
+        String extra = img.getExtra();
+        if(!TextUtils.isEmpty(extra)){
+            try {
+                JSONObject jsonObj = new JSONObject(extra);
+                String name = jsonObj.getString("name");
+                if(TextUtils.isEmpty(name)){
+                    mTv.setText(img.getFname());
+                }else{
+                    mTv.setText(name);
+                }
+            } catch (JSONException e) {
+                mTv.setText(img.getFname());
+            }
+        } else{
+            mTv.setText(img.getFname());
+        }
+
         mIvSmile.setImageResource(
                 TextUtils.isEmpty(img.getFace_token()) ? R.mipmap.ic_smile_g:R.mipmap.ic_smile_a);
     }

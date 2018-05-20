@@ -4,36 +4,34 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.facesample.R;
 
 public class MenuDialog extends Dialog implements View.OnClickListener {
 
+    private final String[] actions;
     private Callback cb;
 
-    public MenuDialog(@NonNull Context context) {
+    public MenuDialog(@NonNull Context context, String[] actions) {
         super(context);
+        this.actions = actions;
         initView();
     }
 
-    public MenuDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
-        initView();
-    }
-
-    protected MenuDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-        initView();
-    }
 
     void initView(){
         View view = View.inflate(getContext(), R.layout.dialog_bottom_menu, null);
         view.findViewById(R.id.bmenu_tv_cancle).setOnClickListener(this);
-        view.findViewById(R.id.bmenu_tv_hide).setOnClickListener(this);
-        view.findViewById(R.id.bmenu_tv_delete).setOnClickListener(this);
+        TextView tvSecond = (TextView) view.findViewById(R.id.bmenu_tv_second);
+        tvSecond.setOnClickListener(this);
+        TextView tvFirst = (TextView) view.findViewById(R.id.bmenu_tv_first);
+        tvFirst.setOnClickListener(this);
+
+        tvFirst.setText(actions[0]);
+        tvSecond.setText(actions[1]);
 
         setContentView(view);
 
@@ -51,8 +49,8 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bmenu_tv_cancle:  onAction(Callback.CANCLE);  break;
-            case R.id.bmenu_tv_hide:    onAction(Callback.HIDDEN);  break;
-            case R.id.bmenu_tv_delete:  onAction(Callback.DELETE);  break;
+            case R.id.bmenu_tv_second:    onAction(1);  break;
+            case R.id.bmenu_tv_first:  onAction(0);  break;
         }
     }
 
@@ -76,10 +74,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     public interface Callback{
 
-        int CANCLE = 1;
-        int HIDDEN = 2;
-        int DELETE = 3;
+        int CANCLE = - 1;
+        int HIDDEN =   2;
+        int DELETE =   3;
 
-        void onAction(Dialog dialog, int action);
+        void onAction(Dialog dialog, int index);
     }
 }

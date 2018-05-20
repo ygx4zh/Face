@@ -4,16 +4,14 @@
     <string name="op_too_often">操作太频繁</string>
     <string name="info_format">
        <![CDATA[
-        <h1>%s</h1>\n\n
-        <h5>%s</h5>\n\n
-        %s
+        <h1>%s</h1>\n
         ]]>
     </string>
     <string name="src_no_face">源图片无法识别出人脸</string>
     <string name="no_similar_face">无匹配上的图片</string>
 
     <string name="similar_photos">相似图集</string>
-    <string name="similar_photos_format">相似图集( %d )</string>
+    <string name="similar_photos_format">相似人脸( %d )</string>
     <string name="commit">COMMIT</string>
     <string name="desc">描述</string>
     <string name="sex">性别</string>

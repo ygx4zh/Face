@@ -12,18 +12,20 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/bmenu_tv_delete"
+            android:id="@+id/bmenu_tv_first"
             android:text="删除"
             style="@style/base_item_tv" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="@color/colorAccent"
             />
 
         <TextView
-            android:id="@+id/bmenu_tv_hide"
+            android:id="@+id/bmenu_tv_second"
             android:text="隐藏"
             style="@style/base_item_tv" />
 

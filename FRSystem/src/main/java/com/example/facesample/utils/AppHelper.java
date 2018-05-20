@@ -2,11 +2,17 @@ package com.example.facesample.utils;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -24,6 +30,30 @@ public class AppHelper {
         }
 
         pool.execute(r);
+    }
+
+    public static File saveImage(Bitmap bmp, String fileName) {
+
+        File file = new File(fileName);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return null;
+
     }
 
     public static int dp2px(Context ctx, float dpValue) {

@@ -113,8 +113,8 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = getIntent();
 
-        int type = intent.getIntExtra("type", 0);
         String path = intent.getStringExtra("path");
+        Log.e(TAG, "initData: "+path);
         bitmap = BitmapFactory.decodeFile(path);
         FaceImageBean image = createBitmapFaceImage(bitmap);
         mFiles.add(image);
@@ -131,16 +131,12 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
         try {
             JSONObject jsonObj = new JSONObject(extra);
             String name = jsonObj.getString("name");
-            String sex = jsonObj.getString("sex");
-            String desc = jsonObj.getString("desc");
             mTv.setText(
                     Html.fromHtml(
                             String.format(
                                     Locale.CHINA,
                                     infoFormat,
-                                    name,
-                                    sex,
-                                    desc)));
+                                    name)));
         } catch (JSONException e) {
 
         }
@@ -159,6 +155,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 mHandler.sendEmptyMessage(SIMILAR_EMPTY);
             }else{
                 List<FaceImageBean> list = DBManager.queryFaceImagesByFaceToken(faceToken);
+                Log.e(TAG, "run: "+list.size()+" // "+faceToken);
                 mFiles.addAll(list);
                 mHandler.sendMessage(Message.obtain(mHandler,UPDATE_FACE_COUNT,list.size()));
                 mHandler.sendEmptyMessage(REFRESHUI);

@@ -64,8 +64,8 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.sampling_btn_commit).setOnClickListener(this);
 
         mEtName = (EditText) findViewById(R.id.sampling_et_name);
-        mEtSex = (EditText) findViewById(R.id.sampling_et_sex);
-        mEtDesc = (EditText) findViewById(R.id.sampling_et_desc);
+        // mEtSex = (EditText) findViewById(R.id.sampling_et_sex);
+        // mEtDesc = (EditText) findViewById(R.id.sampling_et_desc);
 
         Picasso.get().load(new File(getIntent().getStringExtra("path"))).into(mIv);
     }
@@ -117,8 +117,8 @@ public class SamplingActivity extends AppCompatActivity implements View.OnClickL
             JSONObject jsonObj = new JSONObject();
             try {
                 jsonObj.put("name", mEtName.getText().toString().trim());
-                jsonObj.put("sex", mEtSex.getText().toString().trim());
-                jsonObj.put("desc", mEtDesc.getText().toString().trim());
+                // jsonObj.put("sex", mEtSex.getText().toString().trim());
+                // jsonObj.put("desc", mEtDesc.getText().toString().trim());
             }catch (Exception e){}
 
             FaceImageBean bean = new FaceImageBean(

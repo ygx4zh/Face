@@ -21,13 +21,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.facesample.R;
+import com.example.facesample.activities.Camera2Activity;
 import com.example.facesample.activities.SamplingActivity;
 import com.example.facesample.activities.VerifyActivity;
 import com.example.facesample.adapters.ImgAdapter;
 import com.example.facesample.db.DBManager;
 import com.example.facesample.db.bean.FaceImageBean;
+import com.example.facesample.engine.imgscan.ImgScanner;
+import com.example.facesample.engine.imgscan.ImgSubscriber;
+import com.example.facesample.engine.imgscan.ToImgFun;
 import com.example.facesample.ui.dialogs.LoadingDialog;
 import com.example.facesample.ui.dialogs.MenuDialog;
+import com.example.facesample.ui.dialogs.SelectFolderDialog;
 import com.example.facesample.utils.AppHelper;
 
 import java.io.File;
@@ -47,11 +52,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     // 照相
-    private static final int TAKE_PHOTO     = 2;
+    public static final int TAKE_PHOTO     = 2;
 
     // 录入图片
-    private static final int ENTER_PHOTO    = 1;
+    public static final int ENTER_PHOTO    = 1;
     private String takePhotPath;
+    private LoadingDialog loadingDialog;
 
     @Nullable
     @Override
@@ -168,7 +174,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
         switch (v.getId()) {
 
             case R.id.test_fab_action:
-                showSnake(v);
+                // 弹出 录入人脸 | 导入人脸 菜单对话框
+                showActionMenu(v);
                 break;
             case R.id.test_fab_contrast:
                 showCompare(v);
@@ -177,14 +184,27 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
     }
 
     private void showCompare(View v) {
-        Snackbar.make(v, "对比图片", Snackbar.LENGTH_LONG)
+        Snackbar.make(v, "人脸识别", Snackbar.LENGTH_LONG)
                 .setAction("点我", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // startActivity(new Intent(getActivity(), Camera2Activity.class));
+                        // startCameraAty(TAKE_PHOTO);
                         callSystemCameraCapture(TAKE_PHOTO);
                     }
                 }).show();
+    }
+
+    private void startCameraAty(int type) {
+        Intent intent = new Intent(getActivity(), Camera2Activity.class);
+        intent.putExtra("type",type);
+        File dir = new File(Environment.getExternalStorageDirectory(), "face");
+        if(!dir.exists() || dir.isFile()){
+            dir.mkdir();
+        }
+        File photo = new File(dir, System.currentTimeMillis() + "_face.png");
+        takePhotPath = photo.getAbsolutePath();
+        intent.putExtra("path",takePhotPath);
+        startActivity(intent);
     }
 
     private void callSystemCameraCapture(int action){
@@ -217,33 +237,99 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
         }
     }
 
-    private void showSnake(View v) {
-        Snackbar.make(v, "录入人脸", Snackbar.LENGTH_LONG)
-                .setAction("点我", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        showSelectDialog();
+    private void showActionMenu(View v) {
+        // 弹出对话框,
+        MenuDialog dialog = new MenuDialog(getActivity(),new String[]{"录入人脸","导入人脸"});
+        dialog.setCallback(new MenuDialog.Callback() {
+            @Override
+            public void onAction(Dialog dialog, int index) {
+                switch (index) {
+                    case 1:                 // 如果对话框选中的是索引为1(也就是导入人脸)选项,
+                        loadFaces();        // 执行导入人脸的方法;
+                        break;
+                    case 0:
+                        // startCameraAty(ENTER_PHOTO);
                         callSystemCameraCapture(ENTER_PHOTO);
-                    }
-                }).show();
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
+    /**
+     * 弹出框选择sd卡文件夹, 并导入所选择文件夹下的文件
+     */
+    void loadFaces(){
 
+        // 创建选择文件的对话框,
+        SelectFolderDialog selectFolderDialog = new SelectFolderDialog(getActivity(), new SelectFolderDialog.Callback() {
+            @Override
+            public void onSelected(Dialog dialog, boolean selected, @Nullable String folderPath) {
+
+                dialog.dismiss();
+                // 如果文件夹被选中, 并且文件夹路径不为空,
+                if(selected && !TextUtils.isEmpty(folderPath)) {
+
+                    // 扫描sd卡上指定路径的文件夹,
+                    // 将该文件夹下满足条件的图片通过ImgSubscriber方法回调到onScanCompleted方法
+                    // 参数一是文件转成人脸数据的功能接口对象,
+                    // 参数二是扫描的进度以及结果订阅者
+                    ImgScanner.scanSDCard(new ToImgFun(), new ImgSubscriber<FaceImageBean>(new File(folderPath)) {
+                        @Override
+                        public void onScanStart() {
+                            // 开始扫描的时候, 用于弹出进度对话框loading dialog
+                            showLoadingDialog();
+                        }
+
+                        @Override
+                        public void onScanEnd() {
+                            // 扫描结束的时候, 用于执行取消进度对话框和刷新扫描到的数据
+                            dismissLoadingDialog();
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onScanCompleted(List<FaceImageBean> files) {
+                            // 扫描完成的时候, 所扫描到的人脸数据通过files接口传递过来
+                            // 将扫描到的人脸数据插入数据库
+                            DBManager.insertFaceImages(files);
+                            // 将扫描到的人脸数据添加到显示的集合中;
+                            imgBeans.addAll(files);
+                        }
+                    });
+                }
+            }
+        });
+        selectFolderDialog.show();
+    }
+
+    private void showLoadingDialog(){
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.show();
+    }
+    private void dismissLoadingDialog(){
+        if(loadingDialog != null){
+            loadingDialog.dismiss();
+            loadingDialog = null;
+        }
+    }
 
     private static final String TAG = "MainFragment";
 
 
     @Override
     public void onItemLongClick(View itemView, final int position, final FaceImageBean obj) {
-        MenuDialog dialog = new MenuDialog(getActivity());
+        MenuDialog dialog = new MenuDialog(getActivity(),new String[]{"隐藏","删除"});
         dialog.setCallback(new MenuDialog.Callback() {
             @Override
             public void onAction(Dialog dialog, int action) {
                 switch (action) {
-                    case MenuDialog.Callback.DELETE:
+                    case 1:
                         delete(position,obj);
                         break;
-                    case MenuDialog.Callback.HIDDEN:
+                    case 0:
                         hidden(position,obj);
                         break;
                 }
@@ -259,6 +345,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, ImgA
     }
 
     private void delete(int position,FaceImageBean obj) {
+
         int index = imgBeans.indexOf(obj);
         imgBeans.remove(index);
         DBManager.deleteFaceImageBean(obj);

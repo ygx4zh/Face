@@ -33,7 +33,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
+<!--
             <EditText
                 android:id="@+id/sampling_et_sex"
                 android:textColorHint="#FFFFFF"
@@ -50,7 +50,7 @@
                 android:hint="@string/desc"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" />-->
 
 
             <Button

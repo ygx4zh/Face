@@ -26,7 +26,7 @@ import java.util.List;
 public class CameraFragment extends Fragment implements View.OnClickListener,
         TextureView.SurfaceTextureListener,
         Camera.AutoFocusCallback,
-        View.OnTouchListener {
+        View.OnTouchListener, Camera.FaceDetectionListener {
 
     private TextureView mTrv;
     private View mVTakePhoto;
@@ -102,8 +102,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                 camera.setPreviewTexture(mDisplaySurface);
                 camera.startPreview();
                 mCamera = camera;
+                mCamera.setFaceDetectionListener(CameraFragment.this);
                 mCamera.autoFocus(CameraFragment.this);
                 isCanSwitchCamera = true;
+                int detectedFaces = mCamera.getParameters().getMaxNumDetectedFaces();
+                mCamera.startFaceDetection();
+                Log.e(TAG, "run: startFaceDetection"+detectedFaces);
             } catch (IOException e) {
                 e.printStackTrace();
                 // 打开相机失败
@@ -188,6 +192,9 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     }
 
     private void releaseCurCamera() {
+        if(mCamera == null) return;
+
+        mCamera.stopFaceDetection();
         try {
             mCamera.setPreviewTexture(null);
         } catch (IOException ignored) {
@@ -238,6 +245,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+        Log.e(TAG, "onFaceDetection: "+faces.length);
     }
 
     public interface Callback {
